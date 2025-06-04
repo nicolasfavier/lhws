@@ -1,5 +1,5 @@
 import { z } from "zod";
-import {HostStatus, VMStatus} from "../prisma/generated";
+import { HostStatus, VMStatus } from "../prisma/generated";
 import { RightLevel } from "../prisma/generated";
 
 export const eventSchema = z.object({
@@ -29,7 +29,6 @@ export const vmSchema = z.object({
 	ramPeakPercent: z.number(),
 });
 
-
 export const vmResizeSchema = z.object({
 	id: z.string().uuid(),
 	vCPU: z.number(),
@@ -40,4 +39,15 @@ export const userSchema = z.object({
 	id: z.string().uuid(),
 	email: z.string().email(),
 	level: z.nativeEnum(RightLevel),
+});
+
+export const messageSchema = z.object({
+	id: z.string().uuid(),
+	recipient: z.string(),
+	content: z.string(),
+	createdAt: z.date(),
+});
+
+export const maintenanceStatus = z.object({
+	status: z.boolean(),
 });

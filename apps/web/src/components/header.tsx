@@ -1,27 +1,11 @@
-import { Link } from "@tanstack/react-router";
-
-import { ModeToggle } from "./mode-toggle";
+import { Status } from "@web/lib/status";
 
 export default function Header() {
-	const links = [{ to: "/", label: "Home" }];
-
 	return (
-		<div>
-			<div className="flex flex-row items-center justify-between px-2 py-1">
-				<nav className="flex gap-4 text-lg">
-					{links.map(({ to, label }) => {
-						return (
-							<Link key={to} to={to}>
-								{label}
-							</Link>
-						);
-					})}
-				</nav>
-				<div className="flex items-center gap-2">
-					<ModeToggle />
-				</div>
-			</div>
-			<hr />
-		</div>
+		// biome-ignore lint/nursery/useSortedClasses: <explanation>
+		<header className="flex bg-[#f9f8f7] text-primary-foreground gap-10 px-10">
+			<img src="/logo.png" alt="logo" className="w-32" />
+			<Status />
+		</header>
 	);
 }

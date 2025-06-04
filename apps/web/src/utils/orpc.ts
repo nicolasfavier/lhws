@@ -13,6 +13,9 @@ import { toast } from "sonner";
 type ORPCReactUtils = RouterUtils<RouterClient<typeof appRouter>>;
 
 export const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: { refetchInterval: 1000 },
+	},
 	queryCache: new QueryCache({
 		onError: (error) => {
 			toast.error(`Error: ${error.message}`, {

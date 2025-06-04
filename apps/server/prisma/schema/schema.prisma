@@ -44,20 +44,31 @@ enum RightLevel {
   READ
 }
 
-
 model VM {
-  id               String     @id @default(uuid(7)) @db.Uuid
+  id               String   @id @default(uuid(7)) @db.Uuid
   status           VMStatus
   lastStatusChange DateTime
-  vCPU            Int
-  ramGB           Int
-  cpuAvgPercent  Int
-  ramAvgPercent  Int
-  cpuPeakPercent  Int
-  ramPeakPercent  Int
+  vCPU             Int
+  ramGB            Int
+  cpuAvgPercent    Int
+  ramAvgPercent    Int
+  cpuPeakPercent   Int
+  ramPeakPercent   Int
 }
 
 enum VMStatus {
   OFF
   RUNNING
+}
+
+model Message {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  recipient String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model ApiStatus {
+  id        String  @id
+  available Boolean
 }

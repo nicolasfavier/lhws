@@ -6,11 +6,7 @@ import { orpc } from "@web/utils/orpc";
 import type { Inputs } from "@web/utils/orpc";
 
 export function Hosts() {
-	const hosts = useQuery(
-		orpc.hosts.list.queryOptions({
-			refetchInterval: 1000,
-		}),
-	);
+	const hosts = useQuery(orpc.hosts.list.queryOptions());
 
 	const [ref] = useAutoAnimate();
 
@@ -19,31 +15,38 @@ export function Hosts() {
 	return (
 		<div className="max-w-64 space-y-10">
 			<H1>Hosts</H1>
-			<div className="grid grid-cols-2 justify-center gap-2">
-				{Object.entries(hostsByStatus).map(([status, hosts]) => (
-					<p
-						key={status}
-						className={cn(
-							"w-full rounded-full px-2 py-0.5 text-center font-medium text-sm",
-							// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-							getClassName(status as any),
-						)}
-					>
-						{hosts?.length} {status}
-					</p>
-				))}
-			</div>
-			<div className="mx-auto flex flex-wrap justify-evenly gap-2" ref={ref}>
-				{hosts.data?.sort(sort).map((host) => (
+			{!hosts.isError && (
+				<>
+					<div className="grid grid-cols-2 justify-center gap-2">
+						{Object.entries(hostsByStatus).map(([status, hosts]) => (
+							<p
+								key={status}
+								className={cn(
+									"w-full rounded-full px-2 py-0.5 text-center font-medium text-sm",
+									// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+									getClassName(status as any),
+								)}
+							>
+								{hosts?.length} {status}
+							</p>
+						))}
+					</div>
 					<div
-						key={host.id}
-						className={cn(
-							"size-10 rounded-full border transition-colors",
-							getClassName(host.status),
-						)}
-					/>
-				))}
-			</div>
+						className="mx-auto flex flex-wrap justify-evenly gap-2"
+						ref={ref}
+					>
+						{hosts.data?.sort(sort).map((host) => (
+							<div
+								key={host.id}
+								className={cn(
+									"size-10 rounded-full border transition-colors",
+									getClassName(host.status),
+								)}
+							/>
+						))}
+					</div>
+				</>
+			)}
 		</div>
 	);
 }

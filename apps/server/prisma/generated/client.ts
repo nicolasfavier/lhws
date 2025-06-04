@@ -61,6 +61,16 @@ export type Right = Prisma.RightModel
  * 
  */
 export type VM = Prisma.VMModel
+/**
+ * Model Message
+ * 
+ */
+export type Message = Prisma.MessageModel
+/**
+ * Model ApiStatus
+ * 
+ */
+export type ApiStatus = Prisma.ApiStatusModel
 
 export type HostStatus = $Enums.HostStatus
 export const HostStatus = $Enums.HostStatus
