@@ -12,7 +12,8 @@
 		"rootDirs": ["."],
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"]
+			"@server/*": ["../server/src/*"],
+			"@web/*": ["./src/*"]
 		}
 	},
 	"references": [

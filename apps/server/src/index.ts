@@ -1,9 +1,9 @@
 import "dotenv/config";
-import { appRouter } from "@/routers";
 import { OpenAPIGenerator } from "@orpc/openapi";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { CORSPlugin } from "@orpc/server/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod";
+import { appRouter } from "@server/routers";
 
 const handler = new OpenAPIHandler(appRouter, {
 	plugins: [new CORSPlugin()],

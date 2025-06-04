@@ -1,11 +1,7 @@
-import Header from "@/components/header";
-import Loader from "@/components/loader";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
-import { ORPCContext, link, type orpc } from "@/utils/orpc";
 import { createORPCClient } from "@orpc/client";
 import { createORPCReactQueryUtils } from "@orpc/react-query";
 import type { RouterClient } from "@orpc/server";
+import type { appRouter } from "@server/routers";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -15,8 +11,12 @@ import {
 	useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import Header from "@web/components/header";
+import Loader from "@web/components/loader";
+import { ThemeProvider } from "@web/components/theme-provider";
+import { Toaster } from "@web/components/ui/sonner";
+import { ORPCContext, link, type orpc } from "@web/utils/orpc";
 import { useState } from "react";
-import type { appRouter } from "../../../server/src/routers";
 import "../index.css";
 
 export interface RouterAppContext {

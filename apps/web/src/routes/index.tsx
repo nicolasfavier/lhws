@@ -1,6 +1,6 @@
-import { orpc } from "@/utils/orpc";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { orpc } from "@web/utils/orpc";
 
 export const Route = createFileRoute("/")({
 	component: HomeComponent,
@@ -23,7 +23,11 @@ const TITLE_TEXT = `
  `;
 
 function HomeComponent() {
-	const healthCheck = useQuery(orpc.healthCheck.queryOptions());
+	const healthCheck = useQuery(
+		orpc.hosts.list.queryOptions({
+			refetchInterval: 1000,
+		}),
+	);
 
 	return (
 		<div className="container mx-auto max-w-3xl px-4 py-2">

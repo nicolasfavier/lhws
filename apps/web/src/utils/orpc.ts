@@ -1,12 +1,12 @@
 import { createORPCClient } from "@orpc/client";
-import { RPCLink } from "@orpc/client/fetch";
+import { OpenAPILink } from "@orpc/openapi-client/fetch";
 import { createORPCReactQueryUtils } from "@orpc/react-query";
 import type { RouterUtils } from "@orpc/react-query";
 import type { RouterClient } from "@orpc/server";
 import { QueryCache, QueryClient } from "@tanstack/react-query";
 import { createContext, use } from "react";
+import { appRouter } from "server/src/routers";
 import { toast } from "sonner";
-import type { appRouter } from "server/src/routers";
 
 type ORPCReactUtils = RouterUtils<RouterClient<typeof appRouter>>;
 
@@ -25,8 +25,8 @@ export const queryClient = new QueryClient({
 	}),
 });
 
-export const link = new RPCLink({
-	url: `${import.meta.env.VITE_SERVER_URL}/rpc`,
+export const link = new OpenAPILink(appRouter, {
+	url: `${import.meta.env.VITE_SERVER_URL}/api`,
 });
 
 export const client: RouterClient<typeof appRouter> = createORPCClient(link);

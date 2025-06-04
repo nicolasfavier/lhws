@@ -1,4 +1,4 @@
-import { eventSchema } from "@/schemas";
+import { eventSchema } from "@server//schemas";
 import prisma from "../../prisma";
 
 // prevents TS errors

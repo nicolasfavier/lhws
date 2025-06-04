@@ -34,6 +34,7 @@
       "dependencies": {
         "@hookform/resolvers": "^3.10.0",
         "@orpc/client": "^1.2.0",
+        "@orpc/openapi-client": "^1.4.1",
         "@orpc/react-query": "^1.2.0",
         "@orpc/server": "^1.2.0",
         "@radix-ui/react-checkbox": "^1.1.4",

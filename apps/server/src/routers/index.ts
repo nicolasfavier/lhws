@@ -1,13 +1,13 @@
-import { hostSchema } from "@/schemas";
-import type { eventSchema } from "@/schemas";
-import { userSchema } from "@/schemas";
 import { os } from "@orpc/server";
 import { ORPCError } from "@orpc/server";
+import { hostSchema } from "@server/schemas";
+import type { eventSchema } from "@server/schemas";
+import { userSchema } from "@server/schemas";
 import { subMinutes } from "date-fns";
 import { z } from "zod";
 import prisma from "../../prisma";
 
-const worker = new Worker("@/routers/worker.ts");
+const worker = new Worker("@server/routers/worker.ts");
 
 function postEvent(event: z.input<typeof eventSchema>) {
 	worker.postMessage(event);
