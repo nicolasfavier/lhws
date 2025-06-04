@@ -19,10 +19,6 @@ Bun.serve({
 			prefix: "/api",
 		});
 
-		new Promise((resolve) => setTimeout(resolve, 5000)).then(() =>
-			console.log("Resolved"),
-		);
-
 		const url = new URL(request.url);
 
 		if (matched) {
