@@ -1,0 +1,45 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id     String  @id @default(uuid(7)) @db.Uuid
+  email  String  @unique
+  rights Right[]
+}
+
+model Host {
+  id               String     @id @default(uuid(7)) @db.Uuid
+  status           HostStatus
+  lastStatusChange DateTime
+  rights           Right[]
+}
+
+model Right {
+  id     String     @id @default(uuid(7)) @db.Uuid
+  level  RightLevel
+  userId String     @db.Uuid
+  user   User       @relation(fields: [userId], references: [id])
+  hostId String     @db.Uuid
+  host   Host       @relation(fields: [hostId], references: [id])
+}
+
+enum HostStatus {
+  OFF
+  RUNNING
+  STARTING
+  ERROR
+}
+
+enum RightLevel {
+  ADMIN
+  WRITE
+  READ
+}
