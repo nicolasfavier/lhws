@@ -24,3 +24,11 @@ export const RightLevel = {
 } as const
 
 export type RightLevel = (typeof RightLevel)[keyof typeof RightLevel]
+
+
+export const VMStatus = {
+  OFF: 'OFF',
+  RUNNING: 'RUNNING'
+} as const
+
+export type VMStatus = (typeof VMStatus)[keyof typeof VMStatus]

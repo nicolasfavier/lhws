@@ -10,4 +10,5 @@
 export type * from './models/User'
 export type * from './models/Host'
 export type * from './models/Right'
+export type * from './models/VM'
 export type * from './commonInputTypes'

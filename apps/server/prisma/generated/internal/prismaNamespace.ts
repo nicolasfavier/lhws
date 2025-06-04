@@ -396,7 +396,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   Host: 'Host',
-  Right: 'Right'
+  Right: 'Right',
+  VM: 'VM'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "host" | "right"
+    modelProps: "user" | "host" | "right" | "vM"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -638,6 +639,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    VM: {
+      payload: Prisma.$VMPayload<ExtArgs>
+      fields: Prisma.VMFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VMFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VMPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VMFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VMPayload>
+        }
+        findFirst: {
+          args: Prisma.VMFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VMPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VMFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VMPayload>
+        }
+        findMany: {
+          args: Prisma.VMFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VMPayload>[]
+        }
+        create: {
+          args: Prisma.VMCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VMPayload>
+        }
+        createMany: {
+          args: Prisma.VMCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VMCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VMPayload>[]
+        }
+        delete: {
+          args: Prisma.VMDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VMPayload>
+        }
+        update: {
+          args: Prisma.VMUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VMPayload>
+        }
+        deleteMany: {
+          args: Prisma.VMDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VMUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VMUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VMPayload>[]
+        }
+        upsert: {
+          args: Prisma.VMUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VMPayload>
+        }
+        aggregate: {
+          args: Prisma.VMAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVM>
+        }
+        groupBy: {
+          args: Prisma.VMGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VMGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VMCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VMCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -702,6 +777,21 @@ export const RightScalarFieldEnum = {
 } as const
 
 export type RightScalarFieldEnum = (typeof RightScalarFieldEnum)[keyof typeof RightScalarFieldEnum]
+
+
+export const VMScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  lastStatusChange: 'lastStatusChange',
+  vCPU: 'vCPU',
+  ramGB: 'ramGB',
+  cpuAvgPercent: 'cpuAvgPercent',
+  ramAvgPercent: 'ramAvgPercent',
+  cpuPeakPercent: 'cpuPeakPercent',
+  ramPeakPercent: 'ramPeakPercent'
+} as const
+
+export type VMScalarFieldEnum = (typeof VMScalarFieldEnum)[keyof typeof VMScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -783,6 +873,20 @@ export type ListEnumRightLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
+ * Reference to a field of type 'VMStatus'
+ */
+export type EnumVMStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VMStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'VMStatus[]'
+ */
+export type ListEnumVMStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VMStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -793,6 +897,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -873,6 +991,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   host?: Prisma.HostOmit
   right?: Prisma.RightOmit
+  vM?: Prisma.VMOmit
 }
 
 /* Types for Logging */

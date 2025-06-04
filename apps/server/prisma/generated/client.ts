@@ -56,9 +56,17 @@ export type Host = Prisma.HostModel
  * 
  */
 export type Right = Prisma.RightModel
+/**
+ * Model VM
+ * 
+ */
+export type VM = Prisma.VMModel
 
 export type HostStatus = $Enums.HostStatus
 export const HostStatus = $Enums.HostStatus
 
 export type RightLevel = $Enums.RightLevel
 export const RightLevel = $Enums.RightLevel
+
+export type VMStatus = $Enums.VMStatus
+export const VMStatus = $Enums.VMStatus

@@ -43,3 +43,21 @@ enum RightLevel {
   WRITE
   READ
 }
+
+
+model VM {
+  id               String     @id @default(uuid(7)) @db.Uuid
+  status           VMStatus
+  lastStatusChange DateTime
+  vCPU            Int
+  ramGB           Int
+  cpuAvgPercent  Int
+  ramAvgPercent  Int
+  cpuPeakPercent  Int
+  ramPeakPercent  Int
+}
+
+enum VMStatus {
+  OFF
+  RUNNING
+}
