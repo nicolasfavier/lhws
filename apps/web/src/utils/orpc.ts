@@ -1,11 +1,13 @@
 import { createORPCClient } from "@orpc/client";
+import type { InferContractRouterOutputs } from "@orpc/contract";
 import { OpenAPILink } from "@orpc/openapi-client/fetch";
 import { createORPCReactQueryUtils } from "@orpc/react-query";
 import type { RouterUtils } from "@orpc/react-query";
 import type { RouterClient } from "@orpc/server";
+import type { appRouter } from "@server/routers";
 import { QueryCache, QueryClient } from "@tanstack/react-query";
+import contract from "@web/utils/contract.json";
 import { createContext, use } from "react";
-import { appRouter } from "server/src/routers";
 import { toast } from "sonner";
 
 type ORPCReactUtils = RouterUtils<RouterClient<typeof appRouter>>;
@@ -25,7 +27,8 @@ export const queryClient = new QueryClient({
 	}),
 });
 
-export const link = new OpenAPILink(appRouter, {
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export const link = new OpenAPILink(contract as any, {
 	url: `${import.meta.env.VITE_SERVER_URL}/api`,
 });
 
@@ -42,3 +45,5 @@ export function useORPC(): ORPCReactUtils {
 	}
 	return orpc;
 }
+
+export type Inputs = InferContractRouterOutputs<typeof appRouter>;

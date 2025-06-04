@@ -8,7 +8,7 @@ export default defineConfig({
 	plugins: [tailwindcss(), TanStackRouterVite({}), react()],
 	resolve: {
 		alias: {
-			"@": path.resolve(__dirname, "./src"),
+			"@web": path.resolve(__dirname, "./src"),
 		},
 	},
 });

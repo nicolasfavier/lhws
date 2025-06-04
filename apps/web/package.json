@@ -23,6 +23,7 @@
 		"@tanstack/react-query-devtools": "^5.69.0"
 	},
 	"dependencies": {
+		"@formkit/auto-animate": "^0.8.2",
 		"@hookform/resolvers": "^3.10.0",
 		"@orpc/client": "^1.2.0",
 		"@orpc/openapi-client": "^1.4.1",
