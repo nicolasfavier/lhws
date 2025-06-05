@@ -20,6 +20,7 @@ export const hostSchema = z.object({
 export const vmSchema = z.object({
 	id: z.string().uuid(),
 	status: z.nativeEnum(VMStatus),
+	name: z.string(),
 	lastStatusChange: z.date(),
 	vCPU: z.number(),
 	ramGB: z.number(),

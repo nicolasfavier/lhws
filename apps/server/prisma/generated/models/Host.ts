@@ -26,18 +26,21 @@ export type AggregateHost = {
 export type HostMinAggregateOutputType = {
   id: string | null
   status: $Enums.HostStatus | null
+  name: string | null
   lastStatusChange: Date | null
 }
 
 export type HostMaxAggregateOutputType = {
   id: string | null
   status: $Enums.HostStatus | null
+  name: string | null
   lastStatusChange: Date | null
 }
 
 export type HostCountAggregateOutputType = {
   id: number
   status: number
+  name: number
   lastStatusChange: number
   _all: number
 }
@@ -46,18 +49,21 @@ export type HostCountAggregateOutputType = {
 export type HostMinAggregateInputType = {
   id?: true
   status?: true
+  name?: true
   lastStatusChange?: true
 }
 
 export type HostMaxAggregateInputType = {
   id?: true
   status?: true
+  name?: true
   lastStatusChange?: true
 }
 
 export type HostCountAggregateInputType = {
   id?: true
   status?: true
+  name?: true
   lastStatusChange?: true
   _all?: true
 }
@@ -137,6 +143,7 @@ export type HostGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type HostGroupByOutputType = {
   id: string
   status: $Enums.HostStatus
+  name: string
   lastStatusChange: Date
   _count: HostCountAggregateOutputType | null
   _min: HostMinAggregateOutputType | null
@@ -164,6 +171,7 @@ export type HostWhereInput = {
   NOT?: Prisma.HostWhereInput | Prisma.HostWhereInput[]
   id?: Prisma.UuidFilter<"Host"> | string
   status?: Prisma.EnumHostStatusFilter<"Host"> | $Enums.HostStatus
+  name?: Prisma.StringFilter<"Host"> | string
   lastStatusChange?: Prisma.DateTimeFilter<"Host"> | Date | string
   rights?: Prisma.RightListRelationFilter
 }
@@ -171,6 +179,7 @@ export type HostWhereInput = {
 export type HostOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   lastStatusChange?: Prisma.SortOrder
   rights?: Prisma.RightOrderByRelationAggregateInput
 }
@@ -181,6 +190,7 @@ export type HostWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.HostWhereInput[]
   NOT?: Prisma.HostWhereInput | Prisma.HostWhereInput[]
   status?: Prisma.EnumHostStatusFilter<"Host"> | $Enums.HostStatus
+  name?: Prisma.StringFilter<"Host"> | string
   lastStatusChange?: Prisma.DateTimeFilter<"Host"> | Date | string
   rights?: Prisma.RightListRelationFilter
 }, "id">
@@ -188,6 +198,7 @@ export type HostWhereUniqueInput = Prisma.AtLeast<{
 export type HostOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   lastStatusChange?: Prisma.SortOrder
   _count?: Prisma.HostCountOrderByAggregateInput
   _max?: Prisma.HostMaxOrderByAggregateInput
@@ -200,12 +211,14 @@ export type HostScalarWhereWithAggregatesInput = {
   NOT?: Prisma.HostScalarWhereWithAggregatesInput | Prisma.HostScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Host"> | string
   status?: Prisma.EnumHostStatusWithAggregatesFilter<"Host"> | $Enums.HostStatus
+  name?: Prisma.StringWithAggregatesFilter<"Host"> | string
   lastStatusChange?: Prisma.DateTimeWithAggregatesFilter<"Host"> | Date | string
 }
 
 export type HostCreateInput = {
   id?: string
   status: $Enums.HostStatus
+  name?: string
   lastStatusChange: Date | string
   rights?: Prisma.RightCreateNestedManyWithoutHostInput
 }
@@ -213,6 +226,7 @@ export type HostCreateInput = {
 export type HostUncheckedCreateInput = {
   id?: string
   status: $Enums.HostStatus
+  name?: string
   lastStatusChange: Date | string
   rights?: Prisma.RightUncheckedCreateNestedManyWithoutHostInput
 }
@@ -220,6 +234,7 @@ export type HostUncheckedCreateInput = {
 export type HostUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumHostStatusFieldUpdateOperationsInput | $Enums.HostStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   lastStatusChange?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rights?: Prisma.RightUpdateManyWithoutHostNestedInput
 }
@@ -227,6 +242,7 @@ export type HostUpdateInput = {
 export type HostUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumHostStatusFieldUpdateOperationsInput | $Enums.HostStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   lastStatusChange?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rights?: Prisma.RightUncheckedUpdateManyWithoutHostNestedInput
 }
@@ -234,36 +250,42 @@ export type HostUncheckedUpdateInput = {
 export type HostCreateManyInput = {
   id?: string
   status: $Enums.HostStatus
+  name?: string
   lastStatusChange: Date | string
 }
 
 export type HostUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumHostStatusFieldUpdateOperationsInput | $Enums.HostStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   lastStatusChange?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type HostUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumHostStatusFieldUpdateOperationsInput | $Enums.HostStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   lastStatusChange?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type HostCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   lastStatusChange?: Prisma.SortOrder
 }
 
 export type HostMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   lastStatusChange?: Prisma.SortOrder
 }
 
 export type HostMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   lastStatusChange?: Prisma.SortOrder
 }
 
@@ -297,12 +319,14 @@ export type HostUpdateOneRequiredWithoutRightsNestedInput = {
 export type HostCreateWithoutRightsInput = {
   id?: string
   status: $Enums.HostStatus
+  name?: string
   lastStatusChange: Date | string
 }
 
 export type HostUncheckedCreateWithoutRightsInput = {
   id?: string
   status: $Enums.HostStatus
+  name?: string
   lastStatusChange: Date | string
 }
 
@@ -325,12 +349,14 @@ export type HostUpdateToOneWithWhereWithoutRightsInput = {
 export type HostUpdateWithoutRightsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumHostStatusFieldUpdateOperationsInput | $Enums.HostStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   lastStatusChange?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type HostUncheckedUpdateWithoutRightsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumHostStatusFieldUpdateOperationsInput | $Enums.HostStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   lastStatusChange?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -368,6 +394,7 @@ export type HostCountOutputTypeCountRightsArgs<ExtArgs extends runtime.Types.Ext
 export type HostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   status?: boolean
+  name?: boolean
   lastStatusChange?: boolean
   rights?: boolean | Prisma.Host$rightsArgs<ExtArgs>
   _count?: boolean | Prisma.HostCountOutputTypeDefaultArgs<ExtArgs>
@@ -376,22 +403,25 @@ export type HostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type HostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   status?: boolean
+  name?: boolean
   lastStatusChange?: boolean
 }, ExtArgs["result"]["host"]>
 
 export type HostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   status?: boolean
+  name?: boolean
   lastStatusChange?: boolean
 }, ExtArgs["result"]["host"]>
 
 export type HostSelectScalar = {
   id?: boolean
   status?: boolean
+  name?: boolean
   lastStatusChange?: boolean
 }
 
-export type HostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "lastStatusChange", ExtArgs["result"]["host"]>
+export type HostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "name" | "lastStatusChange", ExtArgs["result"]["host"]>
 export type HostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   rights?: boolean | Prisma.Host$rightsArgs<ExtArgs>
   _count?: boolean | Prisma.HostCountOutputTypeDefaultArgs<ExtArgs>
@@ -407,6 +437,7 @@ export type $HostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     status: $Enums.HostStatus
+    name: string
     lastStatusChange: Date
   }, ExtArgs["result"]["host"]>
   composites: {}
@@ -834,6 +865,7 @@ export interface Prisma__HostClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface HostFieldRefs {
   readonly id: Prisma.FieldRef<"Host", 'String'>
   readonly status: Prisma.FieldRef<"Host", 'HostStatus'>
+  readonly name: Prisma.FieldRef<"Host", 'String'>
   readonly lastStatusChange: Prisma.FieldRef<"Host", 'DateTime'>
 }
     

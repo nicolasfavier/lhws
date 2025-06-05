@@ -46,6 +46,7 @@ export type VMSumAggregateOutputType = {
 export type VMMinAggregateOutputType = {
   id: string | null
   status: $Enums.VMStatus | null
+  name: string | null
   lastStatusChange: Date | null
   vCPU: number | null
   ramGB: number | null
@@ -58,6 +59,7 @@ export type VMMinAggregateOutputType = {
 export type VMMaxAggregateOutputType = {
   id: string | null
   status: $Enums.VMStatus | null
+  name: string | null
   lastStatusChange: Date | null
   vCPU: number | null
   ramGB: number | null
@@ -70,6 +72,7 @@ export type VMMaxAggregateOutputType = {
 export type VMCountAggregateOutputType = {
   id: number
   status: number
+  name: number
   lastStatusChange: number
   vCPU: number
   ramGB: number
@@ -102,6 +105,7 @@ export type VMSumAggregateInputType = {
 export type VMMinAggregateInputType = {
   id?: true
   status?: true
+  name?: true
   lastStatusChange?: true
   vCPU?: true
   ramGB?: true
@@ -114,6 +118,7 @@ export type VMMinAggregateInputType = {
 export type VMMaxAggregateInputType = {
   id?: true
   status?: true
+  name?: true
   lastStatusChange?: true
   vCPU?: true
   ramGB?: true
@@ -126,6 +131,7 @@ export type VMMaxAggregateInputType = {
 export type VMCountAggregateInputType = {
   id?: true
   status?: true
+  name?: true
   lastStatusChange?: true
   vCPU?: true
   ramGB?: true
@@ -225,6 +231,7 @@ export type VMGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type VMGroupByOutputType = {
   id: string
   status: $Enums.VMStatus
+  name: string
   lastStatusChange: Date
   vCPU: number
   ramGB: number
@@ -260,6 +267,7 @@ export type VMWhereInput = {
   NOT?: Prisma.VMWhereInput | Prisma.VMWhereInput[]
   id?: Prisma.UuidFilter<"VM"> | string
   status?: Prisma.EnumVMStatusFilter<"VM"> | $Enums.VMStatus
+  name?: Prisma.StringFilter<"VM"> | string
   lastStatusChange?: Prisma.DateTimeFilter<"VM"> | Date | string
   vCPU?: Prisma.IntFilter<"VM"> | number
   ramGB?: Prisma.IntFilter<"VM"> | number
@@ -272,6 +280,7 @@ export type VMWhereInput = {
 export type VMOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   lastStatusChange?: Prisma.SortOrder
   vCPU?: Prisma.SortOrder
   ramGB?: Prisma.SortOrder
@@ -287,6 +296,7 @@ export type VMWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.VMWhereInput[]
   NOT?: Prisma.VMWhereInput | Prisma.VMWhereInput[]
   status?: Prisma.EnumVMStatusFilter<"VM"> | $Enums.VMStatus
+  name?: Prisma.StringFilter<"VM"> | string
   lastStatusChange?: Prisma.DateTimeFilter<"VM"> | Date | string
   vCPU?: Prisma.IntFilter<"VM"> | number
   ramGB?: Prisma.IntFilter<"VM"> | number
@@ -299,6 +309,7 @@ export type VMWhereUniqueInput = Prisma.AtLeast<{
 export type VMOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   lastStatusChange?: Prisma.SortOrder
   vCPU?: Prisma.SortOrder
   ramGB?: Prisma.SortOrder
@@ -319,6 +330,7 @@ export type VMScalarWhereWithAggregatesInput = {
   NOT?: Prisma.VMScalarWhereWithAggregatesInput | Prisma.VMScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"VM"> | string
   status?: Prisma.EnumVMStatusWithAggregatesFilter<"VM"> | $Enums.VMStatus
+  name?: Prisma.StringWithAggregatesFilter<"VM"> | string
   lastStatusChange?: Prisma.DateTimeWithAggregatesFilter<"VM"> | Date | string
   vCPU?: Prisma.IntWithAggregatesFilter<"VM"> | number
   ramGB?: Prisma.IntWithAggregatesFilter<"VM"> | number
@@ -331,6 +343,7 @@ export type VMScalarWhereWithAggregatesInput = {
 export type VMCreateInput = {
   id?: string
   status: $Enums.VMStatus
+  name?: string
   lastStatusChange: Date | string
   vCPU: number
   ramGB: number
@@ -343,6 +356,7 @@ export type VMCreateInput = {
 export type VMUncheckedCreateInput = {
   id?: string
   status: $Enums.VMStatus
+  name?: string
   lastStatusChange: Date | string
   vCPU: number
   ramGB: number
@@ -355,6 +369,7 @@ export type VMUncheckedCreateInput = {
 export type VMUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVMStatusFieldUpdateOperationsInput | $Enums.VMStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   lastStatusChange?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vCPU?: Prisma.IntFieldUpdateOperationsInput | number
   ramGB?: Prisma.IntFieldUpdateOperationsInput | number
@@ -367,6 +382,7 @@ export type VMUpdateInput = {
 export type VMUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVMStatusFieldUpdateOperationsInput | $Enums.VMStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   lastStatusChange?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vCPU?: Prisma.IntFieldUpdateOperationsInput | number
   ramGB?: Prisma.IntFieldUpdateOperationsInput | number
@@ -379,6 +395,7 @@ export type VMUncheckedUpdateInput = {
 export type VMCreateManyInput = {
   id?: string
   status: $Enums.VMStatus
+  name?: string
   lastStatusChange: Date | string
   vCPU: number
   ramGB: number
@@ -391,6 +408,7 @@ export type VMCreateManyInput = {
 export type VMUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVMStatusFieldUpdateOperationsInput | $Enums.VMStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   lastStatusChange?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vCPU?: Prisma.IntFieldUpdateOperationsInput | number
   ramGB?: Prisma.IntFieldUpdateOperationsInput | number
@@ -403,6 +421,7 @@ export type VMUpdateManyMutationInput = {
 export type VMUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVMStatusFieldUpdateOperationsInput | $Enums.VMStatus
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   lastStatusChange?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vCPU?: Prisma.IntFieldUpdateOperationsInput | number
   ramGB?: Prisma.IntFieldUpdateOperationsInput | number
@@ -415,6 +434,7 @@ export type VMUncheckedUpdateManyInput = {
 export type VMCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   lastStatusChange?: Prisma.SortOrder
   vCPU?: Prisma.SortOrder
   ramGB?: Prisma.SortOrder
@@ -436,6 +456,7 @@ export type VMAvgOrderByAggregateInput = {
 export type VMMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   lastStatusChange?: Prisma.SortOrder
   vCPU?: Prisma.SortOrder
   ramGB?: Prisma.SortOrder
@@ -448,6 +469,7 @@ export type VMMaxOrderByAggregateInput = {
 export type VMMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   lastStatusChange?: Prisma.SortOrder
   vCPU?: Prisma.SortOrder
   ramGB?: Prisma.SortOrder
@@ -483,6 +505,7 @@ export type IntFieldUpdateOperationsInput = {
 export type VMSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   status?: boolean
+  name?: boolean
   lastStatusChange?: boolean
   vCPU?: boolean
   ramGB?: boolean
@@ -495,6 +518,7 @@ export type VMSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type VMSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   status?: boolean
+  name?: boolean
   lastStatusChange?: boolean
   vCPU?: boolean
   ramGB?: boolean
@@ -507,6 +531,7 @@ export type VMSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions
 export type VMSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   status?: boolean
+  name?: boolean
   lastStatusChange?: boolean
   vCPU?: boolean
   ramGB?: boolean
@@ -519,6 +544,7 @@ export type VMSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions
 export type VMSelectScalar = {
   id?: boolean
   status?: boolean
+  name?: boolean
   lastStatusChange?: boolean
   vCPU?: boolean
   ramGB?: boolean
@@ -528,7 +554,7 @@ export type VMSelectScalar = {
   ramPeakPercent?: boolean
 }
 
-export type VMOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "lastStatusChange" | "vCPU" | "ramGB" | "cpuAvgPercent" | "ramAvgPercent" | "cpuPeakPercent" | "ramPeakPercent", ExtArgs["result"]["vM"]>
+export type VMOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "name" | "lastStatusChange" | "vCPU" | "ramGB" | "cpuAvgPercent" | "ramAvgPercent" | "cpuPeakPercent" | "ramPeakPercent", ExtArgs["result"]["vM"]>
 
 export type $VMPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "VM"
@@ -536,6 +562,7 @@ export type $VMPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     status: $Enums.VMStatus
+    name: string
     lastStatusChange: Date
     vCPU: number
     ramGB: number
@@ -968,6 +995,7 @@ export interface Prisma__VMClient<T, Null = never, ExtArgs extends runtime.Types
 export interface VMFieldRefs {
   readonly id: Prisma.FieldRef<"VM", 'String'>
   readonly status: Prisma.FieldRef<"VM", 'VMStatus'>
+  readonly name: Prisma.FieldRef<"VM", 'String'>
   readonly lastStatusChange: Prisma.FieldRef<"VM", 'DateTime'>
   readonly vCPU: Prisma.FieldRef<"VM", 'Int'>
   readonly ramGB: Prisma.FieldRef<"VM", 'Int'>

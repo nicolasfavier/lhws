@@ -913,6 +913,7 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const HostScalarFieldEnum = {
   id: 'id',
   status: 'status',
+  name: 'name',
   lastStatusChange: 'lastStatusChange'
 } as const
 
@@ -932,6 +933,7 @@ export type RightScalarFieldEnum = (typeof RightScalarFieldEnum)[keyof typeof Ri
 export const VMScalarFieldEnum = {
   id: 'id',
   status: 'status',
+  name: 'name',
   lastStatusChange: 'lastStatusChange',
   vCPU: 'vCPU',
   ramGB: 'ramGB',

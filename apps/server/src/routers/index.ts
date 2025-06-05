@@ -12,10 +12,10 @@ import prisma from "prisma";
 import { VMStatus } from "prisma/generated";
 import { z } from "zod";
 
-// const worker = new Worker("@server/routers/worker.ts");
+const worker = new Worker("@server/routers/worker.ts");
 
 function postEvent(event: z.input<typeof eventSchema>) {
-	// worker.postMessage(event);
+	worker.postMessage(event);
 }
 
 const statusMiddleware = os.middleware(async ({ next }) => {

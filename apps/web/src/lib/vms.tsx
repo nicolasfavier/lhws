@@ -25,6 +25,7 @@ export function Vms() {
 						)
 						?.map((vm) => (
 							<div key={vm.id} className="grid grid-cols-2 gap-1">
+								<p className="col-span-2">{vm.name}</p>
 								<Progress value={vm.cpuAvgPercent} />
 								<Progress value={vm.cpuPeakPercent} />
 								<Progress value={vm.ramAvgPercent} />

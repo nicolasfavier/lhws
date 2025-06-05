@@ -18,6 +18,7 @@ model User {
 model Host {
   id               String     @id @default(uuid(7)) @db.Uuid
   status           HostStatus
+  name             String     @default("")
   lastStatusChange DateTime
   rights           Right[]
 }
@@ -47,6 +48,7 @@ enum RightLevel {
 model VM {
   id               String   @id @default(uuid(7)) @db.Uuid
   status           VMStatus
+  name             String   @default("")
   lastStatusChange DateTime
   vCPU             Int
   ramGB            Int
