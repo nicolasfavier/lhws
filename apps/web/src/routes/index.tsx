@@ -12,7 +12,7 @@ function HomeComponent() {
 	return (
 		<div>
 			<Header />
-			<div className="grid grid-cols-4 gap-10 p-10">
+			<div className="grid grid-cols-3 gap-10 p-10">
 				<Hosts />
 				<Messages />
 				<Vms />

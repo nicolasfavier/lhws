@@ -13,7 +13,7 @@ export function Hosts() {
 	const hostsByStatus = Object.groupBy(hosts.data ?? [], (host) => host.status);
 
 	return (
-		<div className="max-w-64 space-y-10">
+		<div className="space-y-10">
 			<H1>Hosts</H1>
 			{!hosts.isError && (
 				<>
@@ -39,7 +39,7 @@ export function Hosts() {
 							<div
 								key={host.id}
 								className={cn(
-									"size-6 rounded-full border transition-colors",
+									"size-8 rounded-full border transition-colors",
 									getClassName(host.status),
 								)}
 							/>

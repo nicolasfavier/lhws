@@ -11,7 +11,8 @@ export function Vms() {
 	return (
 		<div>
 			<H1>Virtual Machines</H1>
-			<div className="mb-4 grid grid-cols-2 gap-1">
+			<div className="mb-4 grid grid-cols-3 gap-1">
+				<p>Name</p>
 				<p>CPU</p>
 				<p>RAM</p>
 			</div>
@@ -24,8 +25,8 @@ export function Vms() {
 								new Date(a.lastStatusChange).valueOf(),
 						)
 						?.map((vm) => (
-							<div key={vm.id} className="grid grid-cols-2 gap-1">
-								<p className="col-span-2">{vm.name}</p>
+							<div key={vm.id} className="grid grid-cols-3 gap-1">
+								<p className="row-span-2">{vm.name}</p>
 								<Progress value={vm.cpuAvgPercent} />
 								<Progress value={vm.cpuPeakPercent} />
 								<Progress value={vm.ramAvgPercent} />
