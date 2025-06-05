@@ -339,6 +339,7 @@ export const appRouter = os.router({
 					.input(userSchema)
 					.output(userSchema)
 					.handler(async ({ input }) => {
+						console.log(`Creating user ${input}`);
 						const user = await prisma.user.upsert({
 							update: {},
 							create: {
@@ -346,23 +347,27 @@ export const appRouter = os.router({
 							},
 							where: { email: input.email },
 						});
+						console.log({ user });
 
-						const right = await prisma.right.upsert({
-							create: {
-								hostId: input.id,
-								userId: user.id,
-								level: input.level,
-							},
-							update: {
-								level: input.level,
-							},
-							where: {
-								hostId_userId: {
-									userId: user.id,
+						const right = await prisma.right
+							.upsert({
+								create: {
 									hostId: input.id,
+									userId: user.id,
+									level: input.level,
 								},
-							},
-						});
+								update: {
+									level: input.level,
+								},
+								where: {
+									hostId_userId: {
+										userId: user.id,
+										hostId: input.id,
+									},
+								},
+							})
+							.catch(console.error);
+						console.log({ right });
 
 						return {
 							id: right.id,
@@ -380,7 +385,7 @@ export const appRouter = os.router({
 					.input(z.object({ id: z.string().uuid(), userId: z.string().uuid() }))
 					.handler(async ({ input }) => {
 						const right = await prisma.right.findFirst({
-							where: { userId: input.userId, hostId: input.id },
+							where: { id: input.userId, hostId: input.id },
 						});
 
 						if (!right) throw new ORPCError("NOT_FOUND");
