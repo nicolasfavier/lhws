@@ -17,6 +17,7 @@
 		"schema": "./schema"
 	},
 	"dependencies": {
+		"@faker-js/faker": "^9.8.0",
 		"@orpc/client": "^1.4.1",
 		"@orpc/openapi": "^1.4.1",
 		"@orpc/server": "^1.4.1",

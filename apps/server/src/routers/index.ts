@@ -73,7 +73,7 @@ export const appRouter = os.router({
 				.handler(async () => {
 					return prisma.message.findMany({
 						orderBy: { createdAt: "desc" },
-						take: 4,
+						take: 6,
 					});
 				}),
 			create: os
