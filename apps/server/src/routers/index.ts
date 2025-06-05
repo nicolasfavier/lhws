@@ -12,10 +12,10 @@ import prisma from "prisma";
 import { VMStatus } from "prisma/generated";
 import { z } from "zod";
 
-const worker = new Worker("@server/routers/worker.ts");
+// const worker = new Worker("@server/routers/worker.ts");
 
 function postEvent(event: z.input<typeof eventSchema>) {
-	worker.postMessage(event);
+	// worker.postMessage(event);
 }
 
 const statusMiddleware = os.middleware(async ({ next }) => {
@@ -23,13 +23,15 @@ const statusMiddleware = os.middleware(async ({ next }) => {
 		throw new ORPCError("SERVICE_UNAVAILABLE", {
 			message: "Ooops, i might fail sometimes (like 1 on 10)",
 		});
-	const status = await prisma.apiStatus.findFirstOrThrow();
+	const status = await prisma.apiStatus.findFirstOrThrow({
+		where: { id: "availability" },
+	});
 	if (!status.available) throw new ORPCError("SERVICE_UNAVAILABLE");
 	return next();
 });
 
 export const appRouter = os.router({
-	maintenance: os.prefix("/maintenance/status").router({
+	up: os.prefix("/available/status").router({
 		get: os
 			.route({
 				method: "GET",
@@ -39,7 +41,9 @@ export const appRouter = os.router({
 			})
 			.output(maintenanceStatus)
 			.handler(async () => {
-				const status = await prisma.apiStatus.findFirstOrThrow();
+				const status = await prisma.apiStatus.findFirstOrThrow({
+					where: { id: "availability" },
+				});
 				return {
 					status: status.available,
 				};
@@ -54,7 +58,46 @@ export const appRouter = os.router({
 			.output(maintenanceStatus)
 			.input(maintenanceStatus)
 			.handler(async ({ input }) => {
-				const currentStatus = await prisma.apiStatus.findFirstOrThrow();
+				const currentStatus = await prisma.apiStatus.findFirstOrThrow({
+					where: { id: "availability" },
+				});
+				await prisma.apiStatus.update({
+					where: { id: currentStatus.id },
+					data: { available: input.status },
+				});
+				return input;
+			}),
+	}),
+	maintenance: os.prefix("/maintenance/status").router({
+		get: os
+			.route({
+				method: "GET",
+				path: "/",
+				tags: ["Maintenance"],
+				summary: "Get Maintenance Status",
+			})
+			.output(maintenanceStatus)
+			.handler(async () => {
+				const status = await prisma.apiStatus.findFirstOrThrow({
+					where: { id: "maintenance" },
+				});
+				return {
+					status: status.available,
+				};
+			}),
+		update: os
+			.route({
+				method: "POST",
+				path: "/",
+				tags: ["Maintenance"],
+				summary: "Update Maintenance Status",
+			})
+			.output(maintenanceStatus)
+			.input(maintenanceStatus)
+			.handler(async ({ input }) => {
+				const currentStatus = await prisma.apiStatus.findFirstOrThrow({
+					where: { id: "maintenance" },
+				});
 				await prisma.apiStatus.update({
 					where: { id: currentStatus.id },
 					data: { available: input.status },
