@@ -19,6 +19,10 @@ function postEvent(event: z.input<typeof eventSchema>) {
 }
 
 const statusMiddleware = os.middleware(async ({ next }) => {
+	if (Math.random() < 0.1)
+		throw new ORPCError("SERVICE_UNAVAILABLE", {
+			message: "Ooops, i might fail sometimes (like 1 on 10)",
+		});
 	const status = await prisma.apiStatus.findFirstOrThrow();
 	if (!status.available) throw new ORPCError("SERVICE_UNAVAILABLE");
 	return next();
