@@ -39,7 +39,7 @@ export function Hosts() {
 							<div
 								key={host.id}
 								className={cn(
-									"size-10 rounded-full border transition-colors",
+									"size-6 rounded-full border transition-colors",
 									getClassName(host.status),
 								)}
 							/>
