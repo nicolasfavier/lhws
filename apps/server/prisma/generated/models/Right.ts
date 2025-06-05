@@ -188,6 +188,7 @@ export type RightOrderByWithRelationInput = {
 
 export type RightWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  hostId_userId?: Prisma.RightHostIdUserIdCompoundUniqueInput
   AND?: Prisma.RightWhereInput | Prisma.RightWhereInput[]
   OR?: Prisma.RightWhereInput[]
   NOT?: Prisma.RightWhereInput | Prisma.RightWhereInput[]
@@ -196,7 +197,7 @@ export type RightWhereUniqueInput = Prisma.AtLeast<{
   hostId?: Prisma.UuidFilter<"Right"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   host?: Prisma.XOR<Prisma.HostScalarRelationFilter, Prisma.HostWhereInput>
-}, "id">
+}, "id" | "hostId_userId">
 
 export type RightOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -273,6 +274,11 @@ export type RightListRelationFilter = {
 
 export type RightOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type RightHostIdUserIdCompoundUniqueInput = {
+  hostId: string
+  userId: string
 }
 
 export type RightCountOrderByAggregateInput = {

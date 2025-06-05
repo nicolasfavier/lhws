@@ -30,6 +30,8 @@ model Right {
   user   User       @relation(fields: [userId], references: [id])
   hostId String     @db.Uuid
   host   Host       @relation(fields: [hostId], references: [id])
+
+  @@unique([hostId, userId])
 }
 
 enum HostStatus {

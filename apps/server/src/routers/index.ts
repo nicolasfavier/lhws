@@ -327,7 +327,7 @@ export const appRouter = os.router({
 							include: { user: true },
 						});
 
-						return users.map(({ level, user }) => ({ ...user, level }));
+						return users.map(({ level, user, id }) => ({ ...user, level, id }));
 					}),
 				invite: os
 					.route({
@@ -347,11 +347,20 @@ export const appRouter = os.router({
 							where: { email: input.email },
 						});
 
-						const right = await prisma.right.create({
-							data: {
+						const right = await prisma.right.upsert({
+							create: {
 								hostId: input.id,
 								userId: user.id,
 								level: input.level,
+							},
+							update: {
+								level: input.level,
+							},
+							where: {
+								hostId_userId: {
+									userId: user.id,
+									hostId: input.id,
+								},
 							},
 						});
 
