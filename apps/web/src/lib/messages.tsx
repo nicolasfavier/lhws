@@ -8,6 +8,7 @@ import { CardDescription } from "@web/components/ui/card";
 import { CardContent } from "@web/components/ui/card";
 import { orpc } from "@web/utils/orpc";
 import { formatDistanceToNow } from "date-fns";
+import Markdown from "react-markdown";
 
 export function Messages() {
 	const { data, isError } = useQuery(orpc.messages.list.queryOptions());
@@ -29,7 +30,9 @@ export function Messages() {
 									{formatDistanceToNow(message.createdAt, { addSuffix: true })}
 								</CardDescription>
 							</CardHeader>
-							<CardContent>{message.content}</CardContent>
+							<CardContent>
+								<Markdown>{message.content}</Markdown>
+							</CardContent>
 						</Card>
 					))}
 			</div>
