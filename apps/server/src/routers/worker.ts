@@ -27,5 +27,20 @@ self.onmessage = (event: MessageEvent) => {
 				Math.random() * 60 * 1000,
 			);
 			break;
+        case "database.upgrading":
+            setTimeout(
+                async () => {
+                    console.log("upgrading db");
+                    await prisma.managedDatabase.update({
+                        where: { id: parse.data.id },
+                        data: {
+                            status: "RUNNING",
+                            lastStatusChange: new Date(),
+                        },
+                    });
+                },
+                Math.random() * 60 * 1000,
+            );
+            break;
 	}
 };

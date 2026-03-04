@@ -3,7 +3,7 @@ import { HostStatus, ManagedDatabaseStatus, ManagedDatabaseType, RightLevel, VMS
 
 export const eventSchema = z.object({
 	id: z.string().uuid(),
-	type: z.literal("host.starting"),
+	type: z.string(),
 });
 
 export function event(payload: z.input<typeof eventSchema>) {

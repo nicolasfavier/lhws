@@ -472,16 +472,12 @@ export const appRouter = base.router({
 					method: "GET",
 					path: "/",
 					tags: ["Managed Databases"],
-					summary: "List Active Managed Databases",
+					summary: "List Managed Databases",
 				})
 				.output(z.array(managedDatabaseSchema))
 				.handler(async () => {
 					return prisma.managedDatabase.findMany({
-						where: {
-							status: {
-								not: ManagedDatabaseStatus.OFF,
-							},
-						},
+
 					});
 				}),
 			get: base
@@ -516,31 +512,6 @@ export const appRouter = base.router({
 						data: {
 							...input,
 							status: ManagedDatabaseStatus.CREATING,
-							lastStatusChange: new Date(),
-						},
-					});
-				}),
-			update: base
-				.route({
-					method: "POST",
-					path: "/{id}",
-					tags: ["Managed Databases"],
-					summary: "Update Managed Database",
-				})
-				.input(managedDatabaseUpdateSchema)
-				.output(managedDatabaseSchema)
-				.handler(async ({ input }) => {
-					const existing = await prisma.managedDatabase.findFirst({
-						where: { id: input.id },
-					});
-					if (!existing) throw new ORPCError("NOT_FOUND");
-
-					const { id, ...data } = input;
-					return prisma.managedDatabase.update({
-						where: { id },
-						data: {
-							...data,
-							status: ManagedDatabaseStatus.UPGRADING,
 							lastStatusChange: new Date(),
 						},
 					});
@@ -586,7 +557,7 @@ export const appRouter = base.router({
 							message: `Version must be higher than current version (${existing.version})`,
 						});
 					}
-
+                    postEvent({ id: input.id, type: "database.upgrading" });
 					return prisma.managedDatabase.update({
 						where: { id: input.id },
 						data: {
