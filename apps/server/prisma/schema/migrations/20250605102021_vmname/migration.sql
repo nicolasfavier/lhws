@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "VM" ADD COLUMN     "name" TEXT NOT NULL DEFAULT '';
