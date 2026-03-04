@@ -28,11 +28,11 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 	head: () => ({
 		meta: [
 			{
-				title: "My App",
+				title: "TakiWS Control Center",
 			},
 			{
 				name: "description",
-				content: "My App is a web application",
+				content: "This is the main control center for TakiWS.",
 			},
 		],
 		links: [

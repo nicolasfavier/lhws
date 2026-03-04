@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Header from "@web/components/header";
 import { Hosts } from "@web/lib/hosts";
+import { ManagedDatabases } from "@web/lib/managed-databases";
 import { Messages } from "@web/lib/messages";
 import { Vms } from "@web/lib/vms";
 
@@ -14,6 +15,7 @@ function HomeComponent() {
 			<Header />
 			<div className="grid grid-cols-3 gap-10 p-10">
 				<Hosts />
+				<ManagedDatabases />
 				<Messages />
 				<Vms />
 			</div>

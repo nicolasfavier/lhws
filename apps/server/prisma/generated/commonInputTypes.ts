@@ -190,6 +190,40 @@ export type BoolWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
+export type EnumManagedDatabaseTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ManagedDatabaseType | Prisma.EnumManagedDatabaseTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ManagedDatabaseType[] | Prisma.ListEnumManagedDatabaseTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ManagedDatabaseType[] | Prisma.ListEnumManagedDatabaseTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumManagedDatabaseTypeFilter<$PrismaModel> | $Enums.ManagedDatabaseType
+}
+
+export type EnumManagedDatabaseStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ManagedDatabaseStatus | Prisma.EnumManagedDatabaseStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ManagedDatabaseStatus[] | Prisma.ListEnumManagedDatabaseStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ManagedDatabaseStatus[] | Prisma.ListEnumManagedDatabaseStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumManagedDatabaseStatusFilter<$PrismaModel> | $Enums.ManagedDatabaseStatus
+}
+
+export type EnumManagedDatabaseTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ManagedDatabaseType | Prisma.EnumManagedDatabaseTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ManagedDatabaseType[] | Prisma.ListEnumManagedDatabaseTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ManagedDatabaseType[] | Prisma.ListEnumManagedDatabaseTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumManagedDatabaseTypeWithAggregatesFilter<$PrismaModel> | $Enums.ManagedDatabaseType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumManagedDatabaseTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumManagedDatabaseTypeFilter<$PrismaModel>
+}
+
+export type EnumManagedDatabaseStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ManagedDatabaseStatus | Prisma.EnumManagedDatabaseStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ManagedDatabaseStatus[] | Prisma.ListEnumManagedDatabaseStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ManagedDatabaseStatus[] | Prisma.ListEnumManagedDatabaseStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumManagedDatabaseStatusWithAggregatesFilter<$PrismaModel> | $Enums.ManagedDatabaseStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumManagedDatabaseStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumManagedDatabaseStatusFilter<$PrismaModel>
+}
+
 export type NestedUuidFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -371,6 +405,40 @@ export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedBoolFilter<$PrismaModel>
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
+}
+
+export type NestedEnumManagedDatabaseTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ManagedDatabaseType | Prisma.EnumManagedDatabaseTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ManagedDatabaseType[] | Prisma.ListEnumManagedDatabaseTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ManagedDatabaseType[] | Prisma.ListEnumManagedDatabaseTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumManagedDatabaseTypeFilter<$PrismaModel> | $Enums.ManagedDatabaseType
+}
+
+export type NestedEnumManagedDatabaseStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ManagedDatabaseStatus | Prisma.EnumManagedDatabaseStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ManagedDatabaseStatus[] | Prisma.ListEnumManagedDatabaseStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ManagedDatabaseStatus[] | Prisma.ListEnumManagedDatabaseStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumManagedDatabaseStatusFilter<$PrismaModel> | $Enums.ManagedDatabaseStatus
+}
+
+export type NestedEnumManagedDatabaseTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ManagedDatabaseType | Prisma.EnumManagedDatabaseTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ManagedDatabaseType[] | Prisma.ListEnumManagedDatabaseTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ManagedDatabaseType[] | Prisma.ListEnumManagedDatabaseTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumManagedDatabaseTypeWithAggregatesFilter<$PrismaModel> | $Enums.ManagedDatabaseType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumManagedDatabaseTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumManagedDatabaseTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumManagedDatabaseStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ManagedDatabaseStatus | Prisma.EnumManagedDatabaseStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ManagedDatabaseStatus[] | Prisma.ListEnumManagedDatabaseStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ManagedDatabaseStatus[] | Prisma.ListEnumManagedDatabaseStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumManagedDatabaseStatusWithAggregatesFilter<$PrismaModel> | $Enums.ManagedDatabaseStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumManagedDatabaseStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumManagedDatabaseStatusFilter<$PrismaModel>
 }
 
 

@@ -21,6 +21,7 @@ export async function seed(prisma: PrismaClientType) {
 		create: { id: "maintenance", available: false },
 	});
 
+	await prisma.managedDatabase.deleteMany();
 	await prisma.vM.deleteMany();
 	await prisma.right.deleteMany();
 	await prisma.host.deleteMany();
@@ -91,6 +92,34 @@ export async function seed(prisma: PrismaClientType) {
 				userId: admin.id,
 				hostId: host.id,
 				level: "ADMIN",
+			},
+		});
+	}
+
+	const dbTypes = ["POSTGRESQL", "MARIADB"] as const;
+	const dbStatuses = ["RUNNING", "RUNNING", "RUNNING", "OFF"] as const;
+	const dbVersions: Record<string, string[]> = {
+		POSTGRESQL: ["14.2", "15.1", "16.0", "16.3"],
+		MARIADB: ["10.6", "10.11", "11.1", "11.4"],
+	};
+	const dbNames = [
+		"analytics", "auth-service", "billing", "catalog",
+		"inventory", "logs", "notifications", "sessions",
+	];
+
+	for (const name of dbNames) {
+		const type = dbTypes[Math.floor(Math.random() * dbTypes.length)];
+		const status = dbStatuses[Math.floor(Math.random() * dbStatuses.length)];
+		const versions = dbVersions[type];
+		await prisma.managedDatabase.create({
+			data: {
+				type,
+				status,
+				clusterSize: [1, 2, 3, 5][Math.floor(Math.random() * 4)],
+				version: versions[Math.floor(Math.random() * versions.length)],
+				lastStatusChange: randomDateBetween(1, 20),
+				adminUser: `${name}_admin`,
+				adminPassword: `${name}_secret_${Math.random().toString(36).slice(2, 10)}`,
 			},
 		});
 	}

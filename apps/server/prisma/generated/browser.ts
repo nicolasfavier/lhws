@@ -47,3 +47,8 @@ export type Message = Prisma.MessageModel
  * 
  */
 export type ApiStatus = Prisma.ApiStatusModel
+/**
+ * Model ManagedDatabase
+ * 
+ */
+export type ManagedDatabase = Prisma.ManagedDatabaseModel

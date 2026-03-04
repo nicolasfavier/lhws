@@ -74,3 +74,26 @@ model ApiStatus {
   id        String  @id
   available Boolean
 }
+
+model ManagedDatabase {
+  id               String                @id @default(uuid(7)) @db.Uuid
+  type             ManagedDatabaseType
+  clusterSize      Int
+  version          String
+  lastStatusChange DateTime
+  status           ManagedDatabaseStatus
+  adminUser        String
+  adminPassword    String
+}
+
+enum ManagedDatabaseType {
+  POSTGRESQL
+  MARIADB
+}
+
+enum ManagedDatabaseStatus {
+  CREATING
+  RUNNING
+  UPGRADING
+  OFF
+}

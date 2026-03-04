@@ -3,6 +3,11 @@ import {type eventSchema, hostWithRightsSchema} from "@server/schemas";
 import {
 	hostSchema,
 	maintenanceStatus,
+	managedDatabaseCreateSchema,
+	managedDatabaseScaleSchema,
+	managedDatabaseSchema,
+	managedDatabaseUpdateSchema,
+	managedDatabaseUpgradeSchema,
 	messageSchema,
 	userSchema,
 	vmResizeSchema,
@@ -12,7 +17,7 @@ import { subMinutes } from "date-fns";
 import { z } from "zod";
 import prisma from "../../prisma";
 import { seed } from "../../prisma/seed";
-import { VMStatus } from "../../prisma/generated/client";
+import { ManagedDatabaseStatus, VMStatus } from "../../prisma/generated/client";
 
 const worker = new Worker("@server/routers/worker.ts");
 
@@ -458,6 +463,184 @@ export const appRouter = base.router({
 					}),
 			}),
 		}),
+	managedDatabases: base
+		.prefix("/managed-databases")
+		.use(statusMiddleware)
+		.router({
+			list: base
+				.route({
+					method: "GET",
+					path: "/",
+					tags: ["Managed Databases"],
+					summary: "List Active Managed Databases",
+				})
+				.output(z.array(managedDatabaseSchema))
+				.handler(async () => {
+					return prisma.managedDatabase.findMany({
+						where: {
+							status: {
+								not: ManagedDatabaseStatus.OFF,
+							},
+						},
+					});
+				}),
+			get: base
+				.route({
+					method: "GET",
+					path: "/{id}",
+					tags: ["Managed Databases"],
+					summary: "Get Managed Database by ID",
+				})
+				.input(z.object({ id: z.string().uuid() }))
+				.output(managedDatabaseSchema)
+				.handler(async ({ input }) => {
+					const db = await prisma.managedDatabase.findFirst({
+						where: {
+							id: input.id,
+						},
+					});
+					if (!db) throw new ORPCError("NOT_FOUND");
+					return db;
+				}),
+			create: base
+				.route({
+					method: "POST",
+					path: "/",
+					tags: ["Managed Databases"],
+					summary: "Create Managed Database",
+				})
+				.input(managedDatabaseCreateSchema)
+				.output(managedDatabaseSchema)
+				.handler(async ({ input }) => {
+					return prisma.managedDatabase.create({
+						data: {
+							...input,
+							status: ManagedDatabaseStatus.CREATING,
+							lastStatusChange: new Date(),
+						},
+					});
+				}),
+			update: base
+				.route({
+					method: "POST",
+					path: "/{id}",
+					tags: ["Managed Databases"],
+					summary: "Update Managed Database",
+				})
+				.input(managedDatabaseUpdateSchema)
+				.output(managedDatabaseSchema)
+				.handler(async ({ input }) => {
+					const existing = await prisma.managedDatabase.findFirst({
+						where: { id: input.id },
+					});
+					if (!existing) throw new ORPCError("NOT_FOUND");
+
+					const { id, ...data } = input;
+					return prisma.managedDatabase.update({
+						where: { id },
+						data: {
+							...data,
+							status: ManagedDatabaseStatus.UPGRADING,
+							lastStatusChange: new Date(),
+						},
+					});
+				}),
+			delete: base
+				.route({
+					method: "DELETE",
+					path: "/{id}",
+					tags: ["Managed Databases"],
+					summary: "Delete Managed Database",
+				})
+				.input(z.object({ id: z.string().uuid() }))
+				.handler(async ({ input }) => {
+					const existing = await prisma.managedDatabase.findFirst({
+						where: { id: input.id },
+					});
+					if (!existing) throw new ORPCError("NOT_FOUND");
+
+					await prisma.managedDatabase.update({
+						where: { id: input.id },
+						data: {
+							status: ManagedDatabaseStatus.OFF,
+							lastStatusChange: new Date(),
+						},
+					});
+				}),
+			upgrade: base
+				.route({
+					path: "/{id}/upgrade",
+					tags: ["Managed Databases"],
+					summary: "Upgrade Managed Database Version",
+				})
+				.input(managedDatabaseUpgradeSchema)
+				.output(managedDatabaseSchema)
+				.handler(async ({ input }) => {
+					const existing = await prisma.managedDatabase.findFirst({
+						where: { id: input.id },
+					});
+					if (!existing) throw new ORPCError("NOT_FOUND");
+
+					if (input.version <= existing.version) {
+						throw new ORPCError("BAD_REQUEST", {
+							message: `Version must be higher than current version (${existing.version})`,
+						});
+					}
+
+					return prisma.managedDatabase.update({
+						where: { id: input.id },
+						data: {
+							version: input.version,
+							status: ManagedDatabaseStatus.UPGRADING,
+							lastStatusChange: new Date(),
+						},
+					});
+				}),
+			scale: base
+				.route({
+					path: "/{id}/scale",
+					tags: ["Managed Databases"],
+					summary: "Scale Managed Database Cluster",
+				})
+				.input(managedDatabaseScaleSchema)
+				.output(managedDatabaseSchema)
+				.handler(async ({ input }) => {
+					const existing = await prisma.managedDatabase.findFirst({
+						where: { id: input.id },
+					});
+					if (!existing) throw new ORPCError("NOT_FOUND");
+
+					return prisma.managedDatabase.update({
+						where: { id: input.id },
+						data: {
+							clusterSize: input.clusterSize,
+							lastStatusChange: new Date(),
+						},
+					});
+				}),
+			shutdown: base
+				.route({
+					path: "/{id}/shutdown",
+					tags: ["Managed Databases"],
+					summary: "Shutdown Managed Database",
+				})
+				.input(z.object({ id: z.string().uuid() }))
+				.output(managedDatabaseSchema)
+				.handler(async ({ input }) => {
+					const existing = await prisma.managedDatabase.findFirst({
+						where: { id: input.id },
+					});
+					if (!existing) throw new ORPCError("NOT_FOUND");
+
+					return prisma.managedDatabase.update({
+						where: { id: input.id },
+						data: {
+							status: ManagedDatabaseStatus.OFF,
+							lastStatusChange: new Date(),
+						},
+					});
+				}),
+		}),
     web: base
         .prefix("/web")
         .router({
@@ -468,7 +651,7 @@ export const appRouter = base.router({
                     tags: ["Dashboard Data"],
                     summary: "Refresh Dashboard Data",
                 })
-                .output(z.object({ hosts: z.array(hostWithRightsSchema), vms: z.array(vmSchema), messages: z.array(messageSchema), availability: maintenanceStatus, maintenance: maintenanceStatus}))
+                .output(z.object({ hosts: z.array(hostWithRightsSchema), vms: z.array(vmSchema), messages: z.array(messageSchema), managedDatabases: z.array(managedDatabaseSchema), availability: maintenanceStatus, maintenance: maintenanceStatus}))
                 .handler(async () => {
                     const hostsDb = await prisma.host.findMany({
                         include: {rights: {include: {user: true}}},
@@ -497,10 +680,14 @@ export const appRouter = base.router({
                     const maintenanceStatusDb = await prisma.apiStatus.findFirstOrThrow({
                         where: { id: "maintenance" },
                     });
+                    const managedDatabases = await prisma.managedDatabase.findMany({
+
+                    });
                     return {
                         vms,
                         hosts,
                         messages,
+                        managedDatabases,
                         availability: { status: availabilityStatus.available },
                         maintenance: { status: maintenanceStatusDb.available },
                     }

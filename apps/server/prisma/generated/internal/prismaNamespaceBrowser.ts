@@ -56,7 +56,8 @@ export const ModelName = {
   Right: 'Right',
   VM: 'VM',
   Message: 'Message',
-  ApiStatus: 'ApiStatus'
+  ApiStatus: 'ApiStatus',
+  ManagedDatabase: 'ManagedDatabase'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -135,6 +136,20 @@ export const ApiStatusScalarFieldEnum = {
 } as const
 
 export type ApiStatusScalarFieldEnum = (typeof ApiStatusScalarFieldEnum)[keyof typeof ApiStatusScalarFieldEnum]
+
+
+export const ManagedDatabaseScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  clusterSize: 'clusterSize',
+  version: 'version',
+  lastStatusChange: 'lastStatusChange',
+  status: 'status',
+  adminUser: 'adminUser',
+  adminPassword: 'adminPassword'
+} as const
+
+export type ManagedDatabaseScalarFieldEnum = (typeof ManagedDatabaseScalarFieldEnum)[keyof typeof ManagedDatabaseScalarFieldEnum]
 
 
 export const SortOrder = {

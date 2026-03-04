@@ -235,6 +235,101 @@
 			}
 		}
 	},
+	"managedDatabases": {
+		"list": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"method": "GET",
+					"path": "/managed-databases/",
+					"tags": ["Managed Databases"],
+					"summary": "List Current Managed Databases"
+				}
+			}
+		},
+		"get": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"method": "GET",
+					"path": "/managed-databases/{id}",
+					"tags": ["Managed Databases"],
+					"summary": "Get Managed Database by ID"
+				}
+			}
+		},
+		"create": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"method": "POST",
+					"path": "/managed-databases/",
+					"tags": ["Managed Databases"],
+					"summary": "Create Managed Database"
+				}
+			}
+		},
+		"update": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"method": "POST",
+					"path": "/managed-databases/{id}",
+					"tags": ["Managed Databases"],
+					"summary": "Update Managed Database"
+				}
+			}
+		},
+		"delete": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"method": "DELETE",
+					"path": "/managed-databases/{id}",
+					"tags": ["Managed Databases"],
+					"summary": "Delete Managed Database"
+				}
+			}
+		},
+		"upgrade": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"path": "/managed-databases/{id}/upgrade",
+					"tags": ["Managed Databases"],
+					"summary": "Upgrade Managed Database Version"
+				}
+			}
+		},
+		"scale": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"path": "/managed-databases/{id}/scale",
+					"tags": ["Managed Databases"],
+					"summary": "Scale Managed Database Cluster"
+				}
+			}
+		},
+		"shutdown": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"path": "/managed-databases/{id}/shutdown",
+					"tags": ["Managed Databases"],
+					"summary": "Shutdown Managed Database"
+				}
+			}
+		}
+	},
 	"admin": {
 		"reset": {
 			"~orpc": {

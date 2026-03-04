@@ -389,7 +389,8 @@ export const ModelName = {
   Right: 'Right',
   VM: 'VM',
   Message: 'Message',
-  ApiStatus: 'ApiStatus'
+  ApiStatus: 'ApiStatus',
+  ManagedDatabase: 'ManagedDatabase'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "host" | "right" | "vM" | "message" | "apiStatus"
+    modelProps: "user" | "host" | "right" | "vM" | "message" | "apiStatus" | "managedDatabase"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +854,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ManagedDatabase: {
+      payload: Prisma.$ManagedDatabasePayload<ExtArgs>
+      fields: Prisma.ManagedDatabaseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ManagedDatabaseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ManagedDatabasePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ManagedDatabaseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ManagedDatabasePayload>
+        }
+        findFirst: {
+          args: Prisma.ManagedDatabaseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ManagedDatabasePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ManagedDatabaseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ManagedDatabasePayload>
+        }
+        findMany: {
+          args: Prisma.ManagedDatabaseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ManagedDatabasePayload>[]
+        }
+        create: {
+          args: Prisma.ManagedDatabaseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ManagedDatabasePayload>
+        }
+        createMany: {
+          args: Prisma.ManagedDatabaseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ManagedDatabaseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ManagedDatabasePayload>[]
+        }
+        delete: {
+          args: Prisma.ManagedDatabaseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ManagedDatabasePayload>
+        }
+        update: {
+          args: Prisma.ManagedDatabaseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ManagedDatabasePayload>
+        }
+        deleteMany: {
+          args: Prisma.ManagedDatabaseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ManagedDatabaseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ManagedDatabaseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ManagedDatabasePayload>[]
+        }
+        upsert: {
+          args: Prisma.ManagedDatabaseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ManagedDatabasePayload>
+        }
+        aggregate: {
+          args: Prisma.ManagedDatabaseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateManagedDatabase>
+        }
+        groupBy: {
+          args: Prisma.ManagedDatabaseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ManagedDatabaseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ManagedDatabaseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ManagedDatabaseCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -952,6 +1027,20 @@ export const ApiStatusScalarFieldEnum = {
 } as const
 
 export type ApiStatusScalarFieldEnum = (typeof ApiStatusScalarFieldEnum)[keyof typeof ApiStatusScalarFieldEnum]
+
+
+export const ManagedDatabaseScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  clusterSize: 'clusterSize',
+  version: 'version',
+  lastStatusChange: 'lastStatusChange',
+  status: 'status',
+  adminUser: 'adminUser',
+  adminPassword: 'adminPassword'
+} as const
+
+export type ManagedDatabaseScalarFieldEnum = (typeof ManagedDatabaseScalarFieldEnum)[keyof typeof ManagedDatabaseScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1064,6 +1153,34 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'ManagedDatabaseType'
+ */
+export type EnumManagedDatabaseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ManagedDatabaseType'>
+    
+
+
+/**
+ * Reference to a field of type 'ManagedDatabaseType[]'
+ */
+export type ListEnumManagedDatabaseTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ManagedDatabaseType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ManagedDatabaseStatus'
+ */
+export type EnumManagedDatabaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ManagedDatabaseStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ManagedDatabaseStatus[]'
+ */
+export type ListEnumManagedDatabaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ManagedDatabaseStatus[]'>
     
 
 
@@ -1181,6 +1298,7 @@ export type GlobalOmitConfig = {
   vM?: Prisma.VMOmit
   message?: Prisma.MessageOmit
   apiStatus?: Prisma.ApiStatusOmit
+  managedDatabase?: Prisma.ManagedDatabaseOmit
 }
 
 /* Types for Logging */

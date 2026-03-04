@@ -30,7 +30,7 @@ setInterval(async () => {
                 ramPeakPercent: Math.max(input.ramPeakPercent, futureRamAvg),
                 cpuAvgPercent: futureCpuAvg,
                 ramAvgPercent: futureRamAvg,
-                lastStatusChange: new Date(),
+                lastStatusChange: input.lastStatusChange,
             },
         });
     })

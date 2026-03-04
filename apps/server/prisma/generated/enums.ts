@@ -34,3 +34,21 @@ export const VMStatus = {
 } as const
 
 export type VMStatus = (typeof VMStatus)[keyof typeof VMStatus]
+
+
+export const ManagedDatabaseType = {
+  POSTGRESQL: 'POSTGRESQL',
+  MARIADB: 'MARIADB'
+} as const
+
+export type ManagedDatabaseType = (typeof ManagedDatabaseType)[keyof typeof ManagedDatabaseType]
+
+
+export const ManagedDatabaseStatus = {
+  CREATING: 'CREATING',
+  RUNNING: 'RUNNING',
+  UPGRADING: 'UPGRADING',
+  OFF: 'OFF'
+} as const
+
+export type ManagedDatabaseStatus = (typeof ManagedDatabaseStatus)[keyof typeof ManagedDatabaseStatus]
