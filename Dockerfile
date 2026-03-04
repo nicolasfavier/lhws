@@ -4,12 +4,9 @@ WORKDIR /usr/src/app
 RUN apt update && apt install python3 python3-pip make g++ -y
 COPY . .
 RUN bun install
-ARG DATABASE_URL
-ENV DATABASE_URL=${DATABASE_URL}
-RUN cat .env
-RUN DATABASE_URL="${DATABASE_URL}" bun db:generate
-RUN DATABASE_URL="${DATABASE_URL}" bun db:migrate
-RUN DATABASE_URL="${DATABASE_URL}" bun db:seed
+RUN bun --env-file=.env db:generate
+RUN bun --env-file=.env db:migrate
+RUN bun --env-file=.env db:seed
 
 EXPOSE 3000/tcp
 ENV HOSTNAME="0.0.0.0"
