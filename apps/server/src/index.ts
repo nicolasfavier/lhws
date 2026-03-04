@@ -4,6 +4,7 @@ import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { CORSPlugin } from "@orpc/server/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { appRouter } from "@server/routers";
+import prisma from "../prisma";
 
 const handler = new OpenAPIHandler(appRouter, {
 	plugins: [new CORSPlugin()],
@@ -12,6 +13,30 @@ const handler = new OpenAPIHandler(appRouter, {
 const openAPIGenerator = new OpenAPIGenerator({
 	schemaConverters: [new ZodToJsonSchemaConverter()],
 });
+
+setInterval(async () => {
+    const vms = await prisma.vM.findMany({
+        where: {status: "RUNNING"}
+    });
+    vms.forEach(async (input) => {
+        const futureCpuAvg = Math.min(100, input.cpuAvgPercent + Math.random() * 10 - 5);
+        const futureRamAvg = Math.min(100, input.ramAvgPercent + Math.random() * 10 - 5);
+        let prismaVMClient = await prisma.vM.update({
+            where: { id: input.id },
+            data: {
+                vCPU: input.vCPU,
+                ramGB: input.ramGB,
+                cpuPeakPercent: Math.max(input.cpuPeakPercent, futureCpuAvg),
+                ramPeakPercent: Math.max(input.ramPeakPercent, futureRamAvg),
+                cpuAvgPercent: futureCpuAvg,
+                ramAvgPercent: futureRamAvg,
+                lastStatusChange: new Date(),
+            },
+        });
+    })
+
+
+}, 30_000)
 
 Bun.serve({
 	async fetch(request: Request) {
