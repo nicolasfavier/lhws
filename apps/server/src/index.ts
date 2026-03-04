@@ -46,7 +46,7 @@ Bun.serve({
 				],
 			});
 
-			return Response.json(JSON.stringify(spec), {
+			return Response.json(spec, {
 				headers: {
                     'Access-Control-Allow-Origin': process.env.CORS_ORIGIN || '*',
 				},
