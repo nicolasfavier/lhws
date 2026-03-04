@@ -6,10 +6,9 @@ COPY . .
 RUN bun install
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
-RUN echo ${DATABASE_URL}
-RUN export DATABASE_bun db:generate
-RUN bun db:migrate
-RUN bun db:seed
+RUN DATABASEURL=${DATABASE_URL} bun db:generate
+RUN DATABASEURL=${DATABASE_URL} bun db:migrate
+RUN DATABASEURL=${DATABASE_URL} bun db:seed
 
 EXPOSE 3000/tcp
 ENV HOSTNAME="0.0.0.0"
