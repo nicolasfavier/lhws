@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ShortcutStateService">
+    <option name="shortcutCounts">
+      <map>
+        <entry key="COMMENT" value="2" />
+        <entry key="COPY_HISTORY" value="5" />
+        <entry key="DUPLICATE" value="73" />
+        <entry key="EXTRACT_VARIABLE" value="1" />
+        <entry key="FIND_ACTION" value="3" />
+        <entry key="FORMAT" value="2" />
+        <entry key="FULL_SEARCH" value="27" />
+        <entry key="NAVIGATE_RECENT_FILE" value="4" />
+        <entry key="NAVIGATE_TO_NEXT_LOCATION" value="5" />
+        <entry key="NAVIGATE_TO_PREVIOUS_LOCATION" value="122" />
+        <entry key="RENAME" value="2" />
+      </map>
+    </option>
+  </component>
+</project>

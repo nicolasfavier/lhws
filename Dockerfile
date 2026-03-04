@@ -7,4 +7,4 @@ RUN bun install
 
 EXPOSE 3000/tcp
 ENV HOSTNAME="0.0.0.0"
-CMD cd apps/server && bun db:generate && bun db:migrate && bun db:seed && bun run src/index.ts
+CMD cd apps/server && bun db:generate && bun db:reset && bun db:migrate && bun db:seed && bun run src/index.ts
