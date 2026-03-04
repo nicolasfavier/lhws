@@ -4,6 +4,7 @@ WORKDIR /usr/src/app
 RUN apt update && apt install python3 python3-pip make g++ -y
 COPY . .
 RUN bun install
+ENV DATABASE_URL=${DATABASE_URL}
 RUN bun db:generate
 RUN bun db:migrate
 RUN bun db:seed
