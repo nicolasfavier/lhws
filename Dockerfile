@@ -6,6 +6,7 @@ COPY . .
 RUN bun install
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
+RUN cat .env
 RUN DATABASE_URL="${DATABASE_URL}" bun db:generate
 RUN DATABASE_URL="${DATABASE_URL}" bun db:migrate
 RUN DATABASE_URL="${DATABASE_URL}" bun db:seed
