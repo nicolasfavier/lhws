@@ -1,8 +1,8 @@
 import { createORPCClient } from "@orpc/client";
 import type { InferContractRouterOutputs } from "@orpc/contract";
 import { OpenAPILink } from "@orpc/openapi-client/fetch";
-import { createORPCReactQueryUtils } from "@orpc/react-query";
 import type { RouterUtils } from "@orpc/react-query";
+import { createORPCReactQueryUtils } from "@orpc/react-query";
 import type { RouterClient } from "@orpc/server";
 import type { appRouter } from "@server/routers";
 import { QueryCache, QueryClient } from "@tanstack/react-query";
@@ -14,7 +14,10 @@ type ORPCReactUtils = RouterUtils<RouterClient<typeof appRouter>>;
 
 export const queryClient = new QueryClient({
 	defaultOptions: {
-		queries: { refetchInterval: 1000 },
+		queries: {
+			refetchInterval: 1000,
+			retry: false,
+		},
 	},
 	queryCache: new QueryCache({
 		onError: (error) => {
@@ -30,7 +33,7 @@ export const queryClient = new QueryClient({
 	}),
 });
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: contract type mismatch
 export const link = new OpenAPILink(contract as any, {
 	url: `${import.meta.env.VITE_SERVER_URL}/api`,
 });

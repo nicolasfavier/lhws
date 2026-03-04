@@ -1,39 +1,64 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useQuery } from "@tanstack/react-query";
+import {
+	ServiceUnavailable,
+	isServiceError,
+} from "@web/components/service-unavailable";
 import { H1 } from "@web/components/typography";
 import { Progress } from "@web/components/ui/progress";
 import { orpc } from "@web/utils/orpc";
+import { useStableQuery } from "@web/utils/use-stable-query";
+
+function getHostName(vmName: string) {
+	const last = vmName.lastIndexOf("-");
+	return last > 0 ? vmName.slice(0, last) : vmName;
+}
 
 export function Vms() {
-	const { data, isError } = useQuery(orpc.vms.list.queryOptions());
+	const { data, error, isError } = useStableQuery(
+		orpc.vms.list.queryOptions(),
+	);
 	const [ref] = useAutoAnimate();
+
+	const grouped = Object.entries(
+		Object.groupBy(data ?? [], (vm) => getHostName(vm.name)),
+	).sort(([a], [b]) => a.localeCompare(b));
 
 	return (
 		<div>
 			<H1>Virtual Machines</H1>
-			<div className="mb-4 grid grid-cols-3 gap-1">
-				<p>Name</p>
-				<p>CPU</p>
-				<p>RAM</p>
-			</div>
-			<div className="space-y-3" ref={ref}>
-				{!isError &&
-					data
-						?.sort(
-							(a, b) =>
-								new Date(b.lastStatusChange).valueOf() -
-								new Date(a.lastStatusChange).valueOf(),
-						)
-						?.map((vm) => (
-							<div key={vm.id} className="grid grid-cols-3 gap-1">
-								<p className="row-span-2">{vm.name}</p>
-								<Progress value={vm.cpuAvgPercent} />
-								<Progress value={vm.cpuPeakPercent} />
-								<Progress value={vm.ramAvgPercent} />
-								<Progress value={vm.ramPeakPercent} />
+			{isServiceError(error) ? (
+				<ServiceUnavailable />
+			) : (
+				!isError && (
+					<div className="space-y-6" ref={ref}>
+						{grouped.map(([host, vms]) => (
+							<div key={host}>
+								<h3 className="mb-2 font-semibold text-sm capitalize">
+									{host}
+								</h3>
+								<div className="mb-1 grid grid-cols-3 gap-1 text-muted-foreground text-xs">
+									<p>Name</p>
+									<p>CPU</p>
+									<p>RAM</p>
+								</div>
+								<div className="space-y-2">
+									{vms
+										?.sort((a, b) => a.name.localeCompare(b.name))
+										.map((vm) => (
+											<div key={vm.id} className="grid grid-cols-3 gap-1">
+												<p className="row-span-2 text-sm">{vm.name}</p>
+												<Progress value={vm.cpuAvgPercent} />
+												<Progress value={vm.cpuPeakPercent} />
+												<Progress value={vm.ramAvgPercent} />
+												<Progress value={vm.ramPeakPercent} />
+											</div>
+										))}
+								</div>
 							</div>
 						))}
-			</div>
+					</div>
+				)
+			)}
 		</div>
 	);
 }

@@ -2,7 +2,7 @@ import "dotenv/config";
 import { OpenAPIGenerator } from "@orpc/openapi";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { CORSPlugin } from "@orpc/server/plugins";
-import { ZodToJsonSchemaConverter } from "@orpc/zod";
+import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { appRouter } from "@server/routers";
 
 const handler = new OpenAPIHandler(appRouter, {
@@ -28,7 +28,7 @@ Bun.serve({
 		if (url.pathname === "/spec.json") {
 			const spec = await openAPIGenerator.generate(appRouter, {
 				info: {
-					title: "HLWS",
+					title: "TakiWS",
 					description: "QubeRT hackathon",
 					version: "1.0.0",
 				},
@@ -44,7 +44,7 @@ Bun.serve({
     <!doctype html>
     <html>
       <head>
-        <title>My Client</title>
+        <title>TakiWS OpenAPI Client</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/svg+xml" href="https://orpc.unnoq.com/icon.svg" />

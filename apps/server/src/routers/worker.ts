@@ -2,7 +2,6 @@ import { eventSchema } from "@server//schemas";
 import prisma from "../../prisma";
 
 // prevents TS errors
-// biome-ignore lint/style/noVar: <explanation>
 declare var self: Worker;
 
 self.onmessage = (event: MessageEvent) => {

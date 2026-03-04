@@ -1,22 +1,36 @@
-import { os } from "@orpc/server";
-import { ORPCError } from "@orpc/server";
-import { hostSchema } from "@server/schemas";
+import { ORPCError, os } from "@orpc/server";
 import type { eventSchema } from "@server/schemas";
-import { userSchema } from "@server/schemas";
-import { vmSchema } from "@server/schemas";
-import { vmResizeSchema } from "@server/schemas";
-import { messageSchema } from "@server/schemas";
-import { maintenanceStatus } from "@server/schemas";
+import {
+	hostSchema,
+	maintenanceStatus,
+	messageSchema,
+	userSchema,
+	vmResizeSchema,
+	vmSchema,
+} from "@server/schemas";
 import { subMinutes } from "date-fns";
-import prisma from "prisma";
-import { VMStatus } from "prisma/generated";
 import { z } from "zod";
+import prisma from "../../prisma";
+import { VMStatus } from "../../prisma/generated/client";
 
 const worker = new Worker("@server/routers/worker.ts");
 
 function postEvent(event: z.input<typeof eventSchema>) {
 	worker.postMessage(event);
 }
+
+const loggingMiddleware = os.middleware(async ({ next, path }) => {
+	try {
+		return await next();
+	} catch (error) {
+		if ((error as { status?: number })?.status !== 503) {
+			console.error(`[${path}]`, error);
+		}
+		throw error;
+	}
+});
+
+const base = os.use(loggingMiddleware);
 
 const statusMiddleware = os.middleware(async ({ next }) => {
 	if (Math.random() < 0.1)
@@ -30,9 +44,9 @@ const statusMiddleware = os.middleware(async ({ next }) => {
 	return next();
 });
 
-export const appRouter = os.router({
-	up: os.prefix("/available/status").router({
-		get: os
+export const appRouter = base.router({
+	up: base.prefix("/available/status").router({
+		get: base
 			.route({
 				method: "GET",
 				path: "/",
@@ -48,7 +62,7 @@ export const appRouter = os.router({
 					status: status.available,
 				};
 			}),
-		update: os
+		update: base
 			.route({
 				method: "POST",
 				path: "/",
@@ -68,8 +82,8 @@ export const appRouter = os.router({
 				return input;
 			}),
 	}),
-	maintenance: os.prefix("/maintenance/status").router({
-		get: os
+	maintenance: base.prefix("/maintenance/status").router({
+		get: base
 			.route({
 				method: "GET",
 				path: "/",
@@ -85,7 +99,7 @@ export const appRouter = os.router({
 					status: status.available,
 				};
 			}),
-		update: os
+		update: base
 			.route({
 				method: "POST",
 				path: "/",
@@ -105,11 +119,11 @@ export const appRouter = os.router({
 				return input;
 			}),
 	}),
-	messages: os
+	messages: base
 		.use(statusMiddleware)
 		.prefix("/messages")
 		.router({
-			list: os
+			list: base
 				.route({
 					method: "GET",
 					path: "/",
@@ -123,7 +137,7 @@ export const appRouter = os.router({
 						take: 6,
 					});
 				}),
-			create: os
+			create: base
 				.route({
 					method: "POST",
 					path: "/",
@@ -136,11 +150,11 @@ export const appRouter = os.router({
 					return prisma.message.create({ data: input });
 				}),
 		}),
-	vms: os
+	vms: base
 		.prefix("/vms")
 		.use(statusMiddleware)
 		.router({
-			list: os
+			list: base
 				.route({
 					method: "GET",
 					path: "/",
@@ -152,12 +166,12 @@ export const appRouter = os.router({
 					return prisma.vM.findMany({
 						where: {
 							status: {
-								not: VMStatus.OFF, // Exclude entries where status is "off"
+								not: VMStatus.OFF,
 							},
 						},
 					});
 				}),
-			get: os
+			get: base
 				.route({
 					method: "GET",
 					path: "/{id}",
@@ -171,14 +185,14 @@ export const appRouter = os.router({
 						where: {
 							id: input.id,
 							status: {
-								not: VMStatus.OFF, // Exclude entries where status is "off"
+								not: VMStatus.OFF,
 							},
 						},
 					});
 					if (!vm) throw new ORPCError("NOT_FOUND");
 					return vm;
 				}),
-			start: os
+			start: base
 				.route({
 					path: "/{id}/start",
 					tags: ["Virtual Machines"],
@@ -197,7 +211,7 @@ export const appRouter = os.router({
 
 					return vm;
 				}),
-			resize: os
+			resize: base
 				.route({
 					path: "/{id}/resize",
 					tags: ["Virtual Machines"],
@@ -225,7 +239,7 @@ export const appRouter = os.router({
 					return vm;
 				}),
 
-			delete: os
+			delete: base
 				.route({
 					method: "DELETE",
 					path: "/{id}",
@@ -248,11 +262,11 @@ export const appRouter = os.router({
 					return vm;
 				}),
 		}),
-	hosts: os
+	hosts: base
 		.prefix("/hosts")
 		.use(statusMiddleware)
 		.router({
-			list: os
+			list: base
 				.route({
 					method: "GET",
 					path: "/",
@@ -261,9 +275,18 @@ export const appRouter = os.router({
 				})
 				.output(z.array(hostSchema))
 				.handler(async () => {
-					return prisma.host.findMany();
+					const hosts = await prisma.host.findMany({
+						include: { rights: { include: { user: true } } },
+					});
+					return hosts.map((host) => ({
+						...host,
+						rights: host.rights.map((r) => ({
+							email: r.user.email,
+							level: r.level,
+						})),
+					}));
 				}),
-			survivors: os
+			survivors: base
 				.route({
 					method: "GET",
 					path: "/survivors",
@@ -272,11 +295,19 @@ export const appRouter = os.router({
 				})
 				.output(z.array(hostSchema))
 				.handler(async () => {
-					return prisma.host.findMany({
+					const hosts = await prisma.host.findMany({
 						where: { lastStatusChange: { lte: subMinutes(new Date(), 7) } },
+						include: { rights: { include: { user: true } } },
 					});
+					return hosts.map((host) => ({
+						...host,
+						rights: host.rights.map((r) => ({
+							email: r.user.email,
+							level: r.level,
+						})),
+					}));
 				}),
-			get: os
+			get: base
 				.route({
 					method: "GET",
 					path: "/{id}",
@@ -286,11 +317,20 @@ export const appRouter = os.router({
 				.input(z.object({ id: z.string().uuid() }))
 				.output(hostSchema)
 				.handler(async ({ input }) => {
-					const host = await prisma.host.findFirst({ where: { id: input.id } });
+					const host = await prisma.host.findFirst({
+						where: { id: input.id },
+						include: { rights: { include: { user: true } } },
+					});
 					if (!host) throw new ORPCError("NOT_FOUND");
-					return host;
+					return {
+						...host,
+						rights: host.rights.map((r) => ({
+							email: r.user.email,
+							level: r.level,
+						})),
+					};
 				}),
-			restart: os
+			restart: base
 				.route({
 					path: "/{id}/restart",
 					tags: ["Hosts"],
@@ -299,20 +339,29 @@ export const appRouter = os.router({
 				.input(z.object({ id: z.string().uuid() }))
 				.output(hostSchema)
 				.handler(async ({ input }) => {
-					let host = await prisma.host.findFirst({ where: { id: input.id } });
-					if (!host) throw new ORPCError("NOT_FOUND");
+					const existing = await prisma.host.findFirst({
+						where: { id: input.id },
+					});
+					if (!existing) throw new ORPCError("NOT_FOUND");
 
-					host = await prisma.host.update({
+					const host = await prisma.host.update({
 						where: { id: input.id },
 						data: { status: "STARTING", lastStatusChange: new Date() },
+						include: { rights: { include: { user: true } } },
 					});
 
 					postEvent({ id: input.id, type: "host.starting" });
 
-					return host;
+					return {
+						...host,
+						rights: host.rights.map((r) => ({
+							email: r.user.email,
+							level: r.level,
+						})),
+					};
 				}),
-			users: os.prefix("/{id}/users").router({
-				list: os
+			users: base.prefix("/{id}/users").router({
+				list: base
 					.route({
 						method: "GET",
 						path: "/",
@@ -329,7 +378,7 @@ export const appRouter = os.router({
 
 						return users.map(({ level, user, id }) => ({ ...user, level, id }));
 					}),
-				invite: os
+				invite: base
 					.route({
 						method: "POST",
 						path: "/",
@@ -349,24 +398,22 @@ export const appRouter = os.router({
 						});
 						console.log({ user });
 
-						const right = await prisma.right
-							.upsert({
-								create: {
-									hostId: input.id,
+						const right = await prisma.right.upsert({
+							create: {
+								hostId: input.id,
+								userId: user.id,
+								level: input.level,
+							},
+							update: {
+								level: input.level,
+							},
+							where: {
+								hostId_userId: {
 									userId: user.id,
-									level: input.level,
+									hostId: input.id,
 								},
-								update: {
-									level: input.level,
-								},
-								where: {
-									hostId_userId: {
-										userId: user.id,
-										hostId: input.id,
-									},
-								},
-							})
-							.catch(console.error);
+							},
+						});
 						console.log({ right });
 
 						return {
@@ -375,7 +422,7 @@ export const appRouter = os.router({
 							level: right.level,
 						};
 					}),
-				delete: os
+				delete: base
 					.route({
 						method: "DELETE",
 						path: "/{userId}",

@@ -1,43 +1,46 @@
 import { useQuery } from "@tanstack/react-query";
-import { Button } from "@web/components/ui/button";
+import { Label } from "@web/components/ui/label";
+import { Switch } from "@web/components/ui/switch";
 import { orpc } from "@web/utils/orpc";
 
 export function Status() {
 	const { data, isLoading } = useQuery(orpc.up.get.queryOptions());
-	const isAvailable = isLoading || data?.status;
+	const isAvailable = data?.status ?? true;
 
 	return (
-		<Button
-			disabled={isLoading}
-			className="my-auto h-20 grow text-xl transition-all"
-			variant={!isLoading && !isAvailable ? "destructive" : "ghost"}
-			onClick={() => orpc.up.update.call({ status: !isAvailable })}
-		>
-			{isLoading
-				? "Loading..."
-				: isAvailable
-					? "Service available"
-					: "SERVICE UNAVAILABLE"}
-		</Button>
+		<div className="flex items-center gap-2">
+			<Switch
+				id="availability"
+				checked={isAvailable}
+				disabled={isLoading}
+				onCheckedChange={(checked) =>
+					orpc.up.update.call({ status: checked })
+				}
+			/>
+			<Label htmlFor="availability" className="cursor-pointer text-sm text-black">
+				Kill Switch
+			</Label>
+		</div>
 	);
 }
 
 export function MaintenanceMode() {
 	const { data, isLoading } = useQuery(orpc.maintenance.get.queryOptions());
-	const isMaintenance = isLoading || data?.status;
+	const isMaintenance = data?.status ?? false;
 
 	return (
-		<Button
-			disabled={isLoading}
-			className="my-auto h-20 grow text-xl transition-all"
-			variant={!isLoading && !isMaintenance ? "secondary" : "ghost"}
-			onClick={() => orpc.maintenance.update.call({ status: !isMaintenance })}
-		>
-			{isLoading
-				? "Loading..."
-				: isMaintenance
-					? "No maintenance"
-					: "Maintenance mode"}
-		</Button>
+		<div className="flex items-center gap-2">
+			<Switch
+				id="maintenance"
+				checked={isMaintenance}
+				disabled={isLoading}
+				onCheckedChange={(checked) =>
+					orpc.maintenance.update.call({ status: checked })
+				}
+			/>
+			<Label htmlFor="maintenance" className="cursor-pointer text-sm text-black">
+				Maintenance mode
+			</Label>
+		</div>
 	);
 }

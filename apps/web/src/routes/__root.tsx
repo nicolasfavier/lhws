@@ -5,17 +5,16 @@ import type { appRouter } from "@server/routers";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
+	createRootRouteWithContext,
 	HeadContent,
 	Outlet,
-	createRootRouteWithContext,
 	useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import Header from "@web/components/header";
 import Loader from "@web/components/loader";
 import { ThemeProvider } from "@web/components/theme-provider";
 import { Toaster } from "@web/components/ui/sonner";
-import { ORPCContext, link, type orpc } from "@web/utils/orpc";
+import { link, ORPCContext, type orpc } from "@web/utils/orpc";
 import { useState } from "react";
 import "../index.css";
 

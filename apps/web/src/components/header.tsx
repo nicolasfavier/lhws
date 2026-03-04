@@ -1,13 +1,16 @@
-import { Status } from "@web/lib/status";
-import { MaintenanceMode } from "@web/lib/status";
+import { MaintenanceMode, Status } from "@web/lib/status";
 
 export default function Header() {
 	return (
-		// biome-ignore lint/nursery/useSortedClasses: <explanation>
-		<header className="flex bg-[#f9f8f7] text-primary-foreground gap-10 px-10">
+		<header className="flex items-center bg-[#f9f8f7] px-10">
 			<img src="/logo.png" alt="logo" className="w-32" />
-			<Status />
-			<MaintenanceMode />
+			<div className="ml-auto flex items-center gap-6">
+				<span className="text-sm font-semibold text-black">
+					Admin
+				</span>
+				<Status />
+				<MaintenanceMode />
+			</div>
 		</header>
 	);
 }

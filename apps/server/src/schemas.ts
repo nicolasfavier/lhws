@@ -1,6 +1,5 @@
 import { z } from "zod";
-import { HostStatus, VMStatus } from "../prisma/generated";
-import { RightLevel } from "../prisma/generated";
+import { HostStatus, RightLevel, VMStatus } from "../prisma/generated/client";
 
 export const eventSchema = z.object({
 	id: z.string().uuid(),
@@ -11,15 +10,22 @@ export function event(payload: z.input<typeof eventSchema>) {
 	return eventSchema.parse(payload);
 }
 
+export const hostRightSchema = z.object({
+	email: z.string().email(),
+	level: z.enum(RightLevel),
+});
+
 export const hostSchema = z.object({
 	id: z.string().uuid(),
-	status: z.nativeEnum(HostStatus),
+	name: z.string(),
+	status: z.enum(HostStatus),
 	lastStatusChange: z.date(),
+	rights: z.array(hostRightSchema),
 });
 
 export const vmSchema = z.object({
 	id: z.string().uuid(),
-	status: z.nativeEnum(VMStatus),
+	status: z.enum(VMStatus),
 	name: z.string(),
 	lastStatusChange: z.date(),
 	vCPU: z.number(),
@@ -39,7 +45,7 @@ export const vmResizeSchema = z.object({
 export const userSchema = z.object({
 	id: z.string().uuid(),
 	email: z.string().email(),
-	level: z.nativeEnum(RightLevel),
+	level: z.enum(RightLevel),
 });
 
 export const messageSchema = z.object({

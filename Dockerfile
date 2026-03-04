@@ -5,6 +5,8 @@ RUN apt update && apt install python3 python3-pip make g++ -y
 COPY . .
 RUN bun install
 RUN bun db:generate
+RUN bun db:migrate
+RUN bun db:seed
 
 EXPOSE 3000/tcp
 ENV HOSTNAME="0.0.0.0"
