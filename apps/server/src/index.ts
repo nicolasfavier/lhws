@@ -26,6 +26,15 @@ Bun.serve({
 		}
 
 		if (url.pathname === "/spec.json") {
+            if (request.method === 'OPTIONS') {
+                return new Response(null, {
+                    headers: {
+                        'Access-Control-Allow-Origin': process.env.CORS_ORIGIN || '*',
+                        'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+                        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                    },
+                });
+            }
 			const spec = await openAPIGenerator.generate(appRouter, {
 				info: {
 					title: "TakiWS",
@@ -37,7 +46,11 @@ Bun.serve({
 				],
 			});
 
-			return Response.json(JSON.stringify(spec));
+			return Response.json(JSON.stringify(spec), {
+				headers: {
+                    'Access-Control-Allow-Origin': process.env.CORS_ORIGIN || '*',
+				},
+            });
 		}
 
 		const html = `
@@ -52,10 +65,13 @@ Bun.serve({
       <body>
         <div id="app"></div>
 
-        <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"
+        data-proxy-url=""
+        ></script>
         <script>
           Scalar.createApiReference('#app', {
             url: '/spec.json',
+            proxy: '',
           })
         </script>
       </body>
