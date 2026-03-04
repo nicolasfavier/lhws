@@ -390,7 +390,8 @@ export const ModelName = {
   VM: 'VM',
   Message: 'Message',
   ApiStatus: 'ApiStatus',
-  ManagedDatabase: 'ManagedDatabase'
+  ManagedDatabase: 'ManagedDatabase',
+  DatabaseBackup: 'DatabaseBackup'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -406,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "host" | "right" | "vM" | "message" | "apiStatus" | "managedDatabase"
+    modelProps: "user" | "host" | "right" | "vM" | "message" | "apiStatus" | "managedDatabase" | "databaseBackup"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -928,6 +929,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DatabaseBackup: {
+      payload: Prisma.$DatabaseBackupPayload<ExtArgs>
+      fields: Prisma.DatabaseBackupFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DatabaseBackupFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DatabaseBackupPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DatabaseBackupFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DatabaseBackupPayload>
+        }
+        findFirst: {
+          args: Prisma.DatabaseBackupFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DatabaseBackupPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DatabaseBackupFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DatabaseBackupPayload>
+        }
+        findMany: {
+          args: Prisma.DatabaseBackupFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DatabaseBackupPayload>[]
+        }
+        create: {
+          args: Prisma.DatabaseBackupCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DatabaseBackupPayload>
+        }
+        createMany: {
+          args: Prisma.DatabaseBackupCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DatabaseBackupCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DatabaseBackupPayload>[]
+        }
+        delete: {
+          args: Prisma.DatabaseBackupDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DatabaseBackupPayload>
+        }
+        update: {
+          args: Prisma.DatabaseBackupUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DatabaseBackupPayload>
+        }
+        deleteMany: {
+          args: Prisma.DatabaseBackupDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DatabaseBackupUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DatabaseBackupUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DatabaseBackupPayload>[]
+        }
+        upsert: {
+          args: Prisma.DatabaseBackupUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DatabaseBackupPayload>
+        }
+        aggregate: {
+          args: Prisma.DatabaseBackupAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDatabaseBackup>
+        }
+        groupBy: {
+          args: Prisma.DatabaseBackupGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DatabaseBackupGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DatabaseBackupCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DatabaseBackupCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1041,6 +1116,15 @@ export const ManagedDatabaseScalarFieldEnum = {
 } as const
 
 export type ManagedDatabaseScalarFieldEnum = (typeof ManagedDatabaseScalarFieldEnum)[keyof typeof ManagedDatabaseScalarFieldEnum]
+
+
+export const DatabaseBackupScalarFieldEnum = {
+  id: 'id',
+  targetDatabaseId: 'targetDatabaseId',
+  status: 'status'
+} as const
+
+export type DatabaseBackupScalarFieldEnum = (typeof DatabaseBackupScalarFieldEnum)[keyof typeof DatabaseBackupScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1185,6 +1269,20 @@ export type ListEnumManagedDatabaseStatusFieldRefInput<$PrismaModel> = FieldRefI
 
 
 /**
+ * Reference to a field of type 'DatabaseBackupStatus'
+ */
+export type EnumDatabaseBackupStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DatabaseBackupStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'DatabaseBackupStatus[]'
+ */
+export type ListEnumDatabaseBackupStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DatabaseBackupStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1299,6 +1397,7 @@ export type GlobalOmitConfig = {
   message?: Prisma.MessageOmit
   apiStatus?: Prisma.ApiStatusOmit
   managedDatabase?: Prisma.ManagedDatabaseOmit
+  databaseBackup?: Prisma.DatabaseBackupOmit
 }
 
 /* Types for Logging */

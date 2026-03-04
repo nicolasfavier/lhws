@@ -57,7 +57,8 @@ export const ModelName = {
   VM: 'VM',
   Message: 'Message',
   ApiStatus: 'ApiStatus',
-  ManagedDatabase: 'ManagedDatabase'
+  ManagedDatabase: 'ManagedDatabase',
+  DatabaseBackup: 'DatabaseBackup'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -150,6 +151,15 @@ export const ManagedDatabaseScalarFieldEnum = {
 } as const
 
 export type ManagedDatabaseScalarFieldEnum = (typeof ManagedDatabaseScalarFieldEnum)[keyof typeof ManagedDatabaseScalarFieldEnum]
+
+
+export const DatabaseBackupScalarFieldEnum = {
+  id: 'id',
+  targetDatabaseId: 'targetDatabaseId',
+  status: 'status'
+} as const
+
+export type DatabaseBackupScalarFieldEnum = (typeof DatabaseBackupScalarFieldEnum)[keyof typeof DatabaseBackupScalarFieldEnum]
 
 
 export const SortOrder = {

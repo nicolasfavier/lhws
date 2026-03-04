@@ -76,3 +76,8 @@ export type ApiStatus = Prisma.ApiStatusModel
  * 
  */
 export type ManagedDatabase = Prisma.ManagedDatabaseModel
+/**
+ * Model DatabaseBackup
+ * 
+ */
+export type DatabaseBackup = Prisma.DatabaseBackupModel

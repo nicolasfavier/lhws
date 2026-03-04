@@ -240,6 +240,7 @@ export type ManagedDatabaseWhereInput = {
   status?: Prisma.EnumManagedDatabaseStatusFilter<"ManagedDatabase"> | $Enums.ManagedDatabaseStatus
   adminUser?: Prisma.StringFilter<"ManagedDatabase"> | string
   adminPassword?: Prisma.StringFilter<"ManagedDatabase"> | string
+  backups?: Prisma.DatabaseBackupListRelationFilter
 }
 
 export type ManagedDatabaseOrderByWithRelationInput = {
@@ -251,6 +252,7 @@ export type ManagedDatabaseOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   adminUser?: Prisma.SortOrder
   adminPassword?: Prisma.SortOrder
+  backups?: Prisma.DatabaseBackupOrderByRelationAggregateInput
 }
 
 export type ManagedDatabaseWhereUniqueInput = Prisma.AtLeast<{
@@ -265,6 +267,7 @@ export type ManagedDatabaseWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumManagedDatabaseStatusFilter<"ManagedDatabase"> | $Enums.ManagedDatabaseStatus
   adminUser?: Prisma.StringFilter<"ManagedDatabase"> | string
   adminPassword?: Prisma.StringFilter<"ManagedDatabase"> | string
+  backups?: Prisma.DatabaseBackupListRelationFilter
 }, "id">
 
 export type ManagedDatabaseOrderByWithAggregationInput = {
@@ -306,6 +309,7 @@ export type ManagedDatabaseCreateInput = {
   status: $Enums.ManagedDatabaseStatus
   adminUser: string
   adminPassword: string
+  backups?: Prisma.DatabaseBackupCreateNestedManyWithoutTargetDatabaseInput
 }
 
 export type ManagedDatabaseUncheckedCreateInput = {
@@ -317,6 +321,7 @@ export type ManagedDatabaseUncheckedCreateInput = {
   status: $Enums.ManagedDatabaseStatus
   adminUser: string
   adminPassword: string
+  backups?: Prisma.DatabaseBackupUncheckedCreateNestedManyWithoutTargetDatabaseInput
 }
 
 export type ManagedDatabaseUpdateInput = {
@@ -328,6 +333,7 @@ export type ManagedDatabaseUpdateInput = {
   status?: Prisma.EnumManagedDatabaseStatusFieldUpdateOperationsInput | $Enums.ManagedDatabaseStatus
   adminUser?: Prisma.StringFieldUpdateOperationsInput | string
   adminPassword?: Prisma.StringFieldUpdateOperationsInput | string
+  backups?: Prisma.DatabaseBackupUpdateManyWithoutTargetDatabaseNestedInput
 }
 
 export type ManagedDatabaseUncheckedUpdateInput = {
@@ -339,6 +345,7 @@ export type ManagedDatabaseUncheckedUpdateInput = {
   status?: Prisma.EnumManagedDatabaseStatusFieldUpdateOperationsInput | $Enums.ManagedDatabaseStatus
   adminUser?: Prisma.StringFieldUpdateOperationsInput | string
   adminPassword?: Prisma.StringFieldUpdateOperationsInput | string
+  backups?: Prisma.DatabaseBackupUncheckedUpdateManyWithoutTargetDatabaseNestedInput
 }
 
 export type ManagedDatabaseCreateManyInput = {
@@ -415,6 +422,11 @@ export type ManagedDatabaseSumOrderByAggregateInput = {
   clusterSize?: Prisma.SortOrder
 }
 
+export type ManagedDatabaseScalarRelationFilter = {
+  is?: Prisma.ManagedDatabaseWhereInput
+  isNot?: Prisma.ManagedDatabaseWhereInput
+}
+
 export type EnumManagedDatabaseTypeFieldUpdateOperationsInput = {
   set?: $Enums.ManagedDatabaseType
 }
@@ -423,6 +435,109 @@ export type EnumManagedDatabaseStatusFieldUpdateOperationsInput = {
   set?: $Enums.ManagedDatabaseStatus
 }
 
+export type ManagedDatabaseCreateNestedOneWithoutBackupsInput = {
+  create?: Prisma.XOR<Prisma.ManagedDatabaseCreateWithoutBackupsInput, Prisma.ManagedDatabaseUncheckedCreateWithoutBackupsInput>
+  connectOrCreate?: Prisma.ManagedDatabaseCreateOrConnectWithoutBackupsInput
+  connect?: Prisma.ManagedDatabaseWhereUniqueInput
+}
+
+export type ManagedDatabaseUpdateOneRequiredWithoutBackupsNestedInput = {
+  create?: Prisma.XOR<Prisma.ManagedDatabaseCreateWithoutBackupsInput, Prisma.ManagedDatabaseUncheckedCreateWithoutBackupsInput>
+  connectOrCreate?: Prisma.ManagedDatabaseCreateOrConnectWithoutBackupsInput
+  upsert?: Prisma.ManagedDatabaseUpsertWithoutBackupsInput
+  connect?: Prisma.ManagedDatabaseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ManagedDatabaseUpdateToOneWithWhereWithoutBackupsInput, Prisma.ManagedDatabaseUpdateWithoutBackupsInput>, Prisma.ManagedDatabaseUncheckedUpdateWithoutBackupsInput>
+}
+
+export type ManagedDatabaseCreateWithoutBackupsInput = {
+  id?: string
+  type: $Enums.ManagedDatabaseType
+  clusterSize: number
+  version: string
+  lastStatusChange: Date | string
+  status: $Enums.ManagedDatabaseStatus
+  adminUser: string
+  adminPassword: string
+}
+
+export type ManagedDatabaseUncheckedCreateWithoutBackupsInput = {
+  id?: string
+  type: $Enums.ManagedDatabaseType
+  clusterSize: number
+  version: string
+  lastStatusChange: Date | string
+  status: $Enums.ManagedDatabaseStatus
+  adminUser: string
+  adminPassword: string
+}
+
+export type ManagedDatabaseCreateOrConnectWithoutBackupsInput = {
+  where: Prisma.ManagedDatabaseWhereUniqueInput
+  create: Prisma.XOR<Prisma.ManagedDatabaseCreateWithoutBackupsInput, Prisma.ManagedDatabaseUncheckedCreateWithoutBackupsInput>
+}
+
+export type ManagedDatabaseUpsertWithoutBackupsInput = {
+  update: Prisma.XOR<Prisma.ManagedDatabaseUpdateWithoutBackupsInput, Prisma.ManagedDatabaseUncheckedUpdateWithoutBackupsInput>
+  create: Prisma.XOR<Prisma.ManagedDatabaseCreateWithoutBackupsInput, Prisma.ManagedDatabaseUncheckedCreateWithoutBackupsInput>
+  where?: Prisma.ManagedDatabaseWhereInput
+}
+
+export type ManagedDatabaseUpdateToOneWithWhereWithoutBackupsInput = {
+  where?: Prisma.ManagedDatabaseWhereInput
+  data: Prisma.XOR<Prisma.ManagedDatabaseUpdateWithoutBackupsInput, Prisma.ManagedDatabaseUncheckedUpdateWithoutBackupsInput>
+}
+
+export type ManagedDatabaseUpdateWithoutBackupsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumManagedDatabaseTypeFieldUpdateOperationsInput | $Enums.ManagedDatabaseType
+  clusterSize?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.StringFieldUpdateOperationsInput | string
+  lastStatusChange?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumManagedDatabaseStatusFieldUpdateOperationsInput | $Enums.ManagedDatabaseStatus
+  adminUser?: Prisma.StringFieldUpdateOperationsInput | string
+  adminPassword?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type ManagedDatabaseUncheckedUpdateWithoutBackupsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumManagedDatabaseTypeFieldUpdateOperationsInput | $Enums.ManagedDatabaseType
+  clusterSize?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.StringFieldUpdateOperationsInput | string
+  lastStatusChange?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumManagedDatabaseStatusFieldUpdateOperationsInput | $Enums.ManagedDatabaseStatus
+  adminUser?: Prisma.StringFieldUpdateOperationsInput | string
+  adminPassword?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+
+/**
+ * Count Type ManagedDatabaseCountOutputType
+ */
+
+export type ManagedDatabaseCountOutputType = {
+  backups: number
+}
+
+export type ManagedDatabaseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  backups?: boolean | ManagedDatabaseCountOutputTypeCountBackupsArgs
+}
+
+/**
+ * ManagedDatabaseCountOutputType without action
+ */
+export type ManagedDatabaseCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ManagedDatabaseCountOutputType
+   */
+  select?: Prisma.ManagedDatabaseCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ManagedDatabaseCountOutputType without action
+ */
+export type ManagedDatabaseCountOutputTypeCountBackupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DatabaseBackupWhereInput
+}
 
 
 export type ManagedDatabaseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -434,6 +549,8 @@ export type ManagedDatabaseSelect<ExtArgs extends runtime.Types.Extensions.Inter
   status?: boolean
   adminUser?: boolean
   adminPassword?: boolean
+  backups?: boolean | Prisma.ManagedDatabase$backupsArgs<ExtArgs>
+  _count?: boolean | Prisma.ManagedDatabaseCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["managedDatabase"]>
 
 export type ManagedDatabaseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -470,10 +587,18 @@ export type ManagedDatabaseSelectScalar = {
 }
 
 export type ManagedDatabaseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "clusterSize" | "version" | "lastStatusChange" | "status" | "adminUser" | "adminPassword", ExtArgs["result"]["managedDatabase"]>
+export type ManagedDatabaseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  backups?: boolean | Prisma.ManagedDatabase$backupsArgs<ExtArgs>
+  _count?: boolean | Prisma.ManagedDatabaseCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type ManagedDatabaseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type ManagedDatabaseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $ManagedDatabasePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ManagedDatabase"
-  objects: {}
+  objects: {
+    backups: Prisma.$DatabaseBackupPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     type: $Enums.ManagedDatabaseType
@@ -877,6 +1002,7 @@ readonly fields: ManagedDatabaseFieldRefs;
  */
 export interface Prisma__ManagedDatabaseClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  backups<T extends Prisma.ManagedDatabase$backupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ManagedDatabase$backupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DatabaseBackupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -931,6 +1057,10 @@ export type ManagedDatabaseFindUniqueArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.ManagedDatabaseOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ManagedDatabaseInclude<ExtArgs> | null
+  /**
    * Filter, which ManagedDatabase to fetch.
    */
   where: Prisma.ManagedDatabaseWhereUniqueInput
@@ -949,6 +1079,10 @@ export type ManagedDatabaseFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.E
    */
   omit?: Prisma.ManagedDatabaseOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ManagedDatabaseInclude<ExtArgs> | null
+  /**
    * Filter, which ManagedDatabase to fetch.
    */
   where: Prisma.ManagedDatabaseWhereUniqueInput
@@ -966,6 +1100,10 @@ export type ManagedDatabaseFindFirstArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the ManagedDatabase
    */
   omit?: Prisma.ManagedDatabaseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ManagedDatabaseInclude<ExtArgs> | null
   /**
    * Filter, which ManagedDatabase to fetch.
    */
@@ -1015,6 +1153,10 @@ export type ManagedDatabaseFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ex
    */
   omit?: Prisma.ManagedDatabaseOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ManagedDatabaseInclude<ExtArgs> | null
+  /**
    * Filter, which ManagedDatabase to fetch.
    */
   where?: Prisma.ManagedDatabaseWhereInput
@@ -1063,6 +1205,10 @@ export type ManagedDatabaseFindManyArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.ManagedDatabaseOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ManagedDatabaseInclude<ExtArgs> | null
+  /**
    * Filter, which ManagedDatabases to fetch.
    */
   where?: Prisma.ManagedDatabaseWhereInput
@@ -1105,6 +1251,10 @@ export type ManagedDatabaseCreateArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the ManagedDatabase
    */
   omit?: Prisma.ManagedDatabaseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ManagedDatabaseInclude<ExtArgs> | null
   /**
    * The data needed to create a ManagedDatabase.
    */
@@ -1153,6 +1303,10 @@ export type ManagedDatabaseUpdateArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the ManagedDatabase
    */
   omit?: Prisma.ManagedDatabaseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ManagedDatabaseInclude<ExtArgs> | null
   /**
    * The data needed to update a ManagedDatabase.
    */
@@ -1220,6 +1374,10 @@ export type ManagedDatabaseUpsertArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.ManagedDatabaseOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ManagedDatabaseInclude<ExtArgs> | null
+  /**
    * The filter to search for the ManagedDatabase to update in case it exists.
    */
   where: Prisma.ManagedDatabaseWhereUniqueInput
@@ -1246,6 +1404,10 @@ export type ManagedDatabaseDeleteArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.ManagedDatabaseOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ManagedDatabaseInclude<ExtArgs> | null
+  /**
    * Filter which ManagedDatabase to delete.
    */
   where: Prisma.ManagedDatabaseWhereUniqueInput
@@ -1266,6 +1428,30 @@ export type ManagedDatabaseDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
+ * ManagedDatabase.backups
+ */
+export type ManagedDatabase$backupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DatabaseBackup
+   */
+  select?: Prisma.DatabaseBackupSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DatabaseBackup
+   */
+  omit?: Prisma.DatabaseBackupOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DatabaseBackupInclude<ExtArgs> | null
+  where?: Prisma.DatabaseBackupWhereInput
+  orderBy?: Prisma.DatabaseBackupOrderByWithRelationInput | Prisma.DatabaseBackupOrderByWithRelationInput[]
+  cursor?: Prisma.DatabaseBackupWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DatabaseBackupScalarFieldEnum | Prisma.DatabaseBackupScalarFieldEnum[]
+}
+
+/**
  * ManagedDatabase without action
  */
 export type ManagedDatabaseDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1277,4 +1463,8 @@ export type ManagedDatabaseDefaultArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the ManagedDatabase
    */
   omit?: Prisma.ManagedDatabaseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ManagedDatabaseInclude<ExtArgs> | null
 }

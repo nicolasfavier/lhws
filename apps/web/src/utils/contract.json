@@ -328,6 +328,67 @@
 					"summary": "Shutdown Managed Database"
 				}
 			}
+		},
+		"start": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"path": "/managed-databases/{id}/start",
+					"tags": ["Managed Databases"],
+					"summary": "Start Managed Database"
+				}
+			}
+		}
+	},
+	"databaseBackups": {
+		"list": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"method": "GET",
+					"path": "/database-backups/",
+					"tags": ["Database Backups"],
+					"summary": "List Database Backups"
+				}
+			}
+		},
+		"get": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"method": "GET",
+					"path": "/database-backups/{id}",
+					"tags": ["Database Backups"],
+					"summary": "Get Database Backup by ID"
+				}
+			}
+		},
+		"create": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"method": "POST",
+					"path": "/database-backups/",
+					"tags": ["Database Backups"],
+					"summary": "Create Database Backup"
+				}
+			}
+		},
+		"delete": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"method": "DELETE",
+					"path": "/database-backups/{id}",
+					"tags": ["Database Backups"],
+					"summary": "Delete Database Backup"
+				}
+			}
 		}
 	},
 	"admin": {

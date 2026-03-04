@@ -84,6 +84,7 @@ model ManagedDatabase {
   status           ManagedDatabaseStatus
   adminUser        String
   adminPassword    String
+  backups          DatabaseBackup[]
 }
 
 enum ManagedDatabaseType {
@@ -96,4 +97,17 @@ enum ManagedDatabaseStatus {
   RUNNING
   UPGRADING
   OFF
+}
+
+model DatabaseBackup {
+  id               String               @id @default(uuid(7)) @db.Uuid
+  targetDatabaseId String               @db.Uuid
+  targetDatabase   ManagedDatabase      @relation(fields: [targetDatabaseId], references: [id])
+  status           DatabaseBackupStatus
+}
+
+enum DatabaseBackupStatus {
+  SCHEDULED
+  RUNNING
+  DONE
 }

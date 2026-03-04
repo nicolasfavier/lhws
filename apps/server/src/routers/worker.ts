@@ -39,7 +39,33 @@ self.onmessage = (event: MessageEvent) => {
                         },
                     });
                 },
-                Math.random() * 60 * 1000,
+                5000 + Math.random() * 20_000,
+            );
+            break;
+        case "database.backup":
+            setTimeout(
+                async () => {
+                    console.log("backup db");
+                    await prisma.databaseBackup.update({
+                        where: { id: parse.data.id },
+                        data: {
+                            status: "RUNNING",
+                        },
+                    });
+                },
+                Math.random() * 5_000,
+            );
+            setTimeout(
+                async () => {
+                    console.log("backup db done");
+                    await prisma.databaseBackup.update({
+                        where: { id: parse.data.id },
+                        data: {
+                            status: "DONE",
+                        },
+                    });
+                },
+                10_000 + Math.random() * 15_000,
             );
             break;
 	}

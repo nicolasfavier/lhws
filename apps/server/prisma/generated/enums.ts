@@ -52,3 +52,12 @@ export const ManagedDatabaseStatus = {
 } as const
 
 export type ManagedDatabaseStatus = (typeof ManagedDatabaseStatus)[keyof typeof ManagedDatabaseStatus]
+
+
+export const DatabaseBackupStatus = {
+  SCHEDULED: 'SCHEDULED',
+  RUNNING: 'RUNNING',
+  DONE: 'DONE'
+} as const
+
+export type DatabaseBackupStatus = (typeof DatabaseBackupStatus)[keyof typeof DatabaseBackupStatus]
