@@ -7,7 +7,7 @@ import { appRouter } from "@server/routers";
 import prisma from "../prisma";
 
 const handler = new OpenAPIHandler(appRouter, {
-	plugins: [new CORSPlugin()],
+    plugins: [new CORSPlugin({ origin: process.env.CORS_ORIGIN || "*" })],
 });
 
 const openAPIGenerator = new OpenAPIGenerator({
