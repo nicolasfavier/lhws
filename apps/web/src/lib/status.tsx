@@ -1,7 +1,10 @@
+import { useState } from "react";
+import { Button } from "@web/components/ui/button";
 import { Label } from "@web/components/ui/label";
 import { Switch } from "@web/components/ui/switch";
 import { useDashboard } from "@web/utils/use-dashboard";
-import { orpc } from "@web/utils/orpc";
+import { orpc, queryClient } from "@web/utils/orpc";
+import { RotateCw } from "lucide-react";
 
 export function Status() {
 	const { data } = useDashboard();
@@ -42,5 +45,29 @@ export function MaintenanceMode() {
 				Maintenance mode
 			</Label>
 		</div>
+	);
+}
+
+export function ResetState() {
+	const [loading, setLoading] = useState(false);
+
+	async function handleReset() {
+		setLoading(true);
+		await orpc.admin.reset.call({});
+		queryClient.invalidateQueries();
+		setLoading(false);
+	}
+
+	return (
+		<Button
+			variant="outline"
+			size="sm"
+			onClick={handleReset}
+			disabled={loading}
+			className="gap-2"
+		>
+			<RotateCw className={loading ? "animate-spin" : ""} />
+			<span className="text-sm text-black">Reset</span>
+		</Button>
 	);
 }

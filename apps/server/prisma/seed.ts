@@ -1,10 +1,6 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "./generated/client";
-
-const adapter = new PrismaPg({
-	connectionString: process.env.DATABASE_URL,
-});
-const prisma = new PrismaClient({ adapter });
+import type { PrismaClient as PrismaClientType } from "./generated/client";
 
 function randomDateBetween(minDays: number, maxDays: number): Date {
 	const ms = 24 * 60 * 60 * 1000;
@@ -12,7 +8,7 @@ function randomDateBetween(minDays: number, maxDays: number): Date {
 	return new Date(Date.now() - offset);
 }
 
-async function main() {
+export async function seed(prisma: PrismaClientType) {
 	await prisma.apiStatus.upsert({
 		where: { id: "availability" },
 		update: {},
@@ -102,6 +98,14 @@ async function main() {
 	console.log("Seed completed");
 }
 
-main()
-	.catch(console.error)
-	.finally(() => prisma.$disconnect());
+// Standalone runner: only executes when run directly (not when imported)
+if (import.meta.main) {
+	const adapter = new PrismaPg({
+		connectionString: process.env.DATABASE_URL,
+	});
+	const prisma = new PrismaClient({ adapter });
+
+	seed(prisma)
+		.catch(console.error)
+		.finally(() => prisma.$disconnect());
+}

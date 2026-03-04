@@ -15,7 +15,7 @@ import { HostRightsModal } from "@web/lib/host-rights-modal";
 import { useDashboard } from "@web/utils/use-dashboard";
 import type { Inputs } from "@web/utils/orpc";
 import { orpc, queryClient } from "@web/utils/orpc";
-import { RotateCw, Shield } from "lucide-react";
+import { Power, RotateCw, Shield } from "lucide-react";
 import { useState } from "react";
 
 const STATUS_ORDER: Inputs["web"]["dashboard"]["hosts"][number]["status"][] = [
@@ -41,6 +41,11 @@ export function Hosts() {
 
 	async function handleRestart(id: string) {
 		await orpc.hosts.restart.call({ id });
+		queryClient.invalidateQueries();
+	}
+
+	async function handleShutdown(id: string) {
+		await orpc.hosts.shutdown.call({ id });
 		queryClient.invalidateQueries();
 	}
 
@@ -108,6 +113,10 @@ export function Hosts() {
 										<DropdownMenuItem onClick={() => handleRestart(host.id)}>
 											<RotateCw />
 											Restart
+										</DropdownMenuItem>
+										<DropdownMenuItem onClick={() => handleShutdown(host.id)}>
+											<Power />
+											Shutdown
 										</DropdownMenuItem>
 									</DropdownMenuContent>
 								</DropdownMenu>

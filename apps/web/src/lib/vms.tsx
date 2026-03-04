@@ -34,7 +34,7 @@ export function Vms() {
 								<h3 className="mb-2 font-semibold text-sm capitalize">
 									{host}
 								</h3>
-								<div className="mb-1 grid grid-cols-3 gap-1 text-muted-foreground text-xs">
+								<div className="mb-1 grid grid-cols-[auto_auto_1fr_auto_1fr] gap-x-2 gap-y-1 text-muted-foreground text-xs">
 									<p>Name</p>
 									<p>CPU</p>
 									<p>RAM</p>
@@ -43,12 +43,28 @@ export function Vms() {
 									{vms
 										?.sort((a, b) => a.name.localeCompare(b.name))
 										.map((vm) => (
-											<div key={vm.id} className="grid grid-cols-3 gap-1">
+											<div key={vm.id} className="grid grid-cols-[auto_auto_1fr_auto_1fr] items-center gap-x-2 gap-y-1">
 												<p className="row-span-2 text-sm">{vm.name}</p>
-												<Progress value={vm.cpuAvgPercent} />
-												<Progress value={vm.cpuPeakPercent} />
-												<Progress value={vm.ramAvgPercent} />
-												<Progress value={vm.ramPeakPercent} />
+												<span className="text-muted-foreground text-xs">AVG</span>
+												<div className="flex items-center gap-1">
+													<Progress value={vm.cpuAvgPercent} className="flex-1" />
+													<span className="w-8 text-right text-muted-foreground text-xs">{vm.cpuAvgPercent}%</span>
+												</div>
+												<span className="text-muted-foreground text-xs">AVG</span>
+												<div className="flex items-center gap-1">
+													<Progress value={vm.ramAvgPercent} className="flex-1" />
+													<span className="w-8 text-right text-muted-foreground text-xs">{vm.ramAvgPercent}%</span>
+												</div>
+												<span className="text-muted-foreground text-xs">PEAK</span>
+												<div className="flex items-center gap-1">
+													<Progress value={vm.cpuPeakPercent} className="flex-1" />
+													<span className="w-8 text-right text-muted-foreground text-xs">{vm.cpuPeakPercent}%</span>
+												</div>
+												<span className="text-muted-foreground text-xs">PEAK</span>
+												<div className="flex items-center gap-1">
+													<Progress value={vm.ramPeakPercent} className="flex-1" />
+													<span className="w-8 text-right text-muted-foreground text-xs">{vm.ramPeakPercent}%</span>
+												</div>
 											</div>
 										))}
 								</div>

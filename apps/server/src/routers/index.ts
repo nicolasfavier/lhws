@@ -11,6 +11,7 @@ import {
 import { subMinutes } from "date-fns";
 import { z } from "zod";
 import prisma from "../../prisma";
+import { seed } from "../../prisma/seed";
 import { VMStatus } from "../../prisma/generated/client";
 
 const worker = new Worker("@server/routers/worker.ts");
@@ -351,6 +352,27 @@ export const appRouter = base.router({
 						})),
 					};
 				}),
+			shutdown: base
+				.route({
+					path: "/{id}/shutdown",
+					tags: ["Hosts"],
+					summary: "Shutdown Host",
+				})
+				.input(z.object({ id: z.string().uuid() }))
+				.output(hostSchema)
+				.handler(async ({ input }) => {
+					const existing = await prisma.host.findFirst({
+						where: { id: input.id },
+					});
+					if (!existing) throw new ORPCError("NOT_FOUND");
+
+					const host = await prisma.host.update({
+						where: { id: input.id },
+						data: { status: "OFF", lastStatusChange: new Date() },
+					});
+
+					return host;
+				}),
 			users: base.prefix("/{id}/users").router({
 				list: base
 					.route({
@@ -482,6 +504,20 @@ export const appRouter = base.router({
                         availability: { status: availabilityStatus.available },
                         maintenance: { status: maintenanceStatusDb.available },
                     }
+                }),
+        }),
+    admin: base
+        .prefix("/admin")
+        .router({
+            reset: base
+                .route({
+                    method: "POST",
+                    path: "/reset",
+                    tags: ["Admin"],
+                    summary: "Reset Global State",
+                })
+                .handler(async () => {
+                    await seed(prisma);
                 }),
         }),
 });

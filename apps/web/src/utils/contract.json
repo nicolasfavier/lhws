@@ -185,6 +185,17 @@
 				}
 			}
 		},
+		"shutdown": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"path": "/hosts/{id}/shutdown",
+					"tags": ["Hosts"],
+					"summary": "Shutdown Host"
+				}
+			}
+		},
 		"users": {
 			"list": {
 				"~orpc": {
@@ -220,6 +231,20 @@
 						"tags": ["Host Users"],
 						"summary": "Remove User from Host"
 					}
+				}
+			}
+		}
+	},
+	"admin": {
+		"reset": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"method": "POST",
+					"path": "/admin/reset",
+					"tags": ["Admin"],
+					"summary": "Reset Global State"
 				}
 			}
 		}

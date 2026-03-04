@@ -1,4 +1,4 @@
-import { MaintenanceMode, Status } from "@web/lib/status";
+import { MaintenanceMode, ResetState, Status } from "@web/lib/status";
 
 export default function Header() {
 	return (
@@ -10,6 +10,7 @@ export default function Header() {
 				</span>
 				<Status />
 				<MaintenanceMode />
+				<ResetState />
 			</div>
 		</header>
 	);
