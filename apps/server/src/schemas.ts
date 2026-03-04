@@ -15,12 +15,20 @@ export const hostRightSchema = z.object({
 	level: z.enum(RightLevel),
 });
 
+
+export const hostWithRightsSchema = z.object({
+    id: z.string().uuid(),
+    name: z.string(),
+    status: z.enum(HostStatus),
+    lastStatusChange: z.date(),
+    rights: z.array(hostRightSchema),
+});
+
 export const hostSchema = z.object({
 	id: z.string().uuid(),
 	name: z.string(),
 	status: z.enum(HostStatus),
 	lastStatusChange: z.date(),
-	rights: z.array(hostRightSchema),
 });
 
 export const vmSchema = z.object({

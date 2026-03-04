@@ -1,5 +1,5 @@
 import { ORPCError, os } from "@orpc/server";
-import type { eventSchema } from "@server/schemas";
+import {type eventSchema, hostWithRightsSchema} from "@server/schemas";
 import {
 	hostSchema,
 	maintenanceStatus,
@@ -275,16 +275,7 @@ export const appRouter = base.router({
 				})
 				.output(z.array(hostSchema))
 				.handler(async () => {
-					const hosts = await prisma.host.findMany({
-						include: { rights: { include: { user: true } } },
-					});
-					return hosts.map((host) => ({
-						...host,
-						rights: host.rights.map((r) => ({
-							email: r.user.email,
-							level: r.level,
-						})),
-					}));
+					return prisma.host.findMany();
 				}),
 			survivors: base
 				.route({
@@ -445,6 +436,54 @@ export const appRouter = base.router({
 					}),
 			}),
 		}),
+    web: base
+        .prefix("/web")
+        .router({
+            dashboard: base
+                .route({
+                    method: "GET",
+                    path: "/",
+                    tags: ["Dashboard Data"],
+                    summary: "Refresh Dashboard Data",
+                })
+                .output(z.object({ hosts: z.array(hostWithRightsSchema), vms: z.array(vmSchema), messages: z.array(messageSchema), availability: maintenanceStatus, maintenance: maintenanceStatus}))
+                .handler(async () => {
+                    const hostsDb = await prisma.host.findMany({
+                        include: {rights: {include: {user: true}}},
+                    });
+                    const hosts = hostsDb.map((host) => ({
+                        ...host,
+                        rights: host.rights.map((r) => ({
+                            email: r.user.email,
+                            level: r.level,
+                        })),
+                    }));
+                    const vms = await prisma.vM.findMany({
+                        where: {
+                            status: {
+                                not: VMStatus.OFF,
+                            },
+                        },
+                    });
+                    const messages = await prisma.message.findMany({
+                        orderBy: { createdAt: "desc" },
+                        take: 6,
+                    });
+                    const availabilityStatus = await prisma.apiStatus.findFirstOrThrow({
+                        where: { id: "availability" },
+                    });
+                    const maintenanceStatusDb = await prisma.apiStatus.findFirstOrThrow({
+                        where: { id: "maintenance" },
+                    });
+                    return {
+                        vms,
+                        hosts,
+                        messages,
+                        availability: { status: availabilityStatus.available },
+                        maintenance: { status: maintenanceStatusDb.available },
+                    }
+                }),
+        }),
 });
 
 export type AppRouter = typeof appRouter;

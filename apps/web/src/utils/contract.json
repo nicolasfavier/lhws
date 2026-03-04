@@ -223,5 +223,19 @@
 				}
 			}
 		}
+	},
+	"web": {
+		"dashboard": {
+			"~orpc": {
+				"errorMap": {},
+				"meta": {},
+				"route": {
+					"method": "GET",
+					"path": "/web/",
+					"tags": ["Dashboard Data"],
+					"summary": "Refresh Dashboard Data"
+				}
+			}
+		}
 	}
 }

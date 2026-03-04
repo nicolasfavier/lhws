@@ -1,5 +1,4 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useStableQuery } from "@web/utils/use-stable-query";
 import {
 	ServiceUnavailable,
 	isServiceError,
@@ -12,14 +11,13 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@web/components/ui/card";
-import { orpc } from "@web/utils/orpc";
+import { useDashboard } from "@web/utils/use-dashboard";
 import { formatDistanceToNow } from "date-fns";
 import Markdown from "react-markdown";
 
 export function Messages() {
-	const { data, error, isError } = useStableQuery(
-		orpc.messages.list.queryOptions(),
-	);
+	const { data, error, isError } = useDashboard();
+	const messages = data?.messages;
 	const [ref] = useAutoAnimate();
 
 	return (
@@ -30,7 +28,7 @@ export function Messages() {
 			) : (
 				<div className="space-y-4" ref={ref}>
 					{!isError &&
-						data?.map((message) => (
+						messages?.map((message) => (
 							<Card key={message.id}>
 								<CardHeader>
 									<CardTitle>

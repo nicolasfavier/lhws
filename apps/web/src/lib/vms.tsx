@@ -5,8 +5,7 @@ import {
 } from "@web/components/service-unavailable";
 import { H1 } from "@web/components/typography";
 import { Progress } from "@web/components/ui/progress";
-import { orpc } from "@web/utils/orpc";
-import { useStableQuery } from "@web/utils/use-stable-query";
+import { useDashboard } from "@web/utils/use-dashboard";
 
 function getHostName(vmName: string) {
 	const last = vmName.lastIndexOf("-");
@@ -14,13 +13,12 @@ function getHostName(vmName: string) {
 }
 
 export function Vms() {
-	const { data, error, isError } = useStableQuery(
-		orpc.vms.list.queryOptions(),
-	);
+	const { data, error, isError } = useDashboard();
+	const vms = data?.vms;
 	const [ref] = useAutoAnimate();
 
 	const grouped = Object.entries(
-		Object.groupBy(data ?? [], (vm) => getHostName(vm.name)),
+		Object.groupBy(vms ?? [], (vm) => getHostName(vm.name)),
 	).sort(([a], [b]) => a.localeCompare(b));
 
 	return (
