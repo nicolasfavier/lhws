@@ -25,7 +25,7 @@ self.onmessage = (event: MessageEvent) => {
 					});
 					self.postMessage({ type: "host.updated", host });
 				},
-				10_000 + Math.random() * 15_000,
+				5_000 + (Math.random() * 10_000),
 			);
 			break;
 		case "database.creating":
