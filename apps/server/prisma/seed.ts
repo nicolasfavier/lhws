@@ -1,6 +1,6 @@
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "./generated/client";
 import type { PrismaClient as PrismaClientType } from "./generated/client";
+import { PrismaClient } from "./generated/client";
 
 function randomDateBetween(minDays: number, maxDays: number): Date {
 	const ms = 24 * 60 * 60 * 1000;
@@ -11,20 +11,20 @@ function randomDateBetween(minDays: number, maxDays: number): Date {
 export async function seed(prisma: PrismaClientType) {
 	await prisma.apiStatus.upsert({
 		where: { id: "availability" },
-		update: {},
+		update: { id: "availability", available: true },
 		create: { id: "availability", available: true },
 	});
 
 	await prisma.apiStatus.upsert({
 		where: { id: "maintenance" },
-		update: {},
+		update: { id: "maintenance", available: false },
 		create: { id: "maintenance", available: false },
 	});
 
-    await prisma.databaseBackup.deleteMany();
+	await prisma.databaseBackup.deleteMany();
 	await prisma.managedDatabase.deleteMany();
 	await prisma.vM.deleteMany();
-    await prisma.message.deleteMany();
+	await prisma.message.deleteMany();
 	await prisma.right.deleteMany();
 	await prisma.host.deleteMany();
 	await prisma.user.deleteMany();
@@ -46,9 +46,48 @@ export async function seed(prisma: PrismaClientType) {
 		"Mandalore",
 		"Lothal",
 		"Dathomir",
+		"Geonosis",
+		"Utapau",
+		"Felucia",
+		"Mygeeto",
+		"Sullust",
+		"Ryloth",
+		"Chandrila",
+		"Corellia",
+		"Jedha",
+		"Eadu",
+		"Crait",
+		"Cantonica",
+		"Exegol",
+		"Kijimi",
+		"Pasaana",
+		"Ahch-To",
+		"Hosnian Prime",
+		"Takodana",
+		"Ilum",
+		"Nal Hutta",
+		"Rodia",
+		"Mon Cala",
+		"Umbara",
+		"Christophsis",
+		"Teth",
+		"Florrum",
+		"Mortis",
+		"Onderon",
+		"Concord Dawn",
+		"Atollon",
+		"Malachor",
+		"Batuu",
 	];
 
-	const statuses = ["RUNNING", "RUNNING", "RUNNING", "OFF", "OFF", "ERROR"] as const;
+	const statuses = [
+		"RUNNING",
+		"RUNNING",
+		"RUNNING",
+        "RUNNING",
+		"OFF",
+		"ERROR",
+	] as const;
 
 	const vmStatuses = ["RUNNING", "RUNNING", "OFF"] as const;
 
@@ -71,7 +110,10 @@ export async function seed(prisma: PrismaClientType) {
 			await prisma.vM.create({
 				data: {
 					name: vmName,
-					status: status === "OFF" ? "OFF" : vmStatuses[Math.floor(Math.random() * vmStatuses.length)],
+					status:
+						status === "OFF"
+							? "OFF"
+							: vmStatuses[Math.floor(Math.random() * vmStatuses.length)],
 					lastStatusChange: randomDateBetween(2, 30),
 					vCPU: [2, 4, 8, 16][Math.floor(Math.random() * 4)],
 					ramGB: [4, 8, 16, 32][Math.floor(Math.random() * 4)],
@@ -105,8 +147,14 @@ export async function seed(prisma: PrismaClientType) {
 		MARIADB: ["10.6", "10.11", "11.1", "11.4"],
 	};
 	const dbNames = [
-		"analytics", "auth-service", "billing", "catalog",
-		"inventory", "logs", "notifications", "sessions",
+		"analytics",
+		"auth-service",
+		"billing",
+		"catalog",
+		"inventory",
+		"logs",
+		"notifications",
+		"sessions",
 	];
 
 	for (const name of dbNames) {

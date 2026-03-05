@@ -1,7 +1,7 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
-	ServiceUnavailable,
 	isServiceError,
+	ServiceUnavailable,
 } from "@web/components/service-unavailable";
 import { H1 } from "@web/components/typography";
 import {
@@ -23,10 +23,10 @@ export function Messages() {
 	return (
 		<div className="flex flex-col overflow-hidden">
 			<H1>Messages</H1>
-			{isServiceError(error) ? (
+			{isServiceError(error, data?.availability?.status) ? (
 				<ServiceUnavailable />
 			) : (
-				<div className="overflow-y-auto space-y-4" ref={ref}>
+				<div className="space-y-4 overflow-y-auto" ref={ref}>
 					{!isError &&
 						messages?.map((message) => (
 							<Card key={message.id}>

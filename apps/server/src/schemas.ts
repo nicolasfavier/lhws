@@ -1,5 +1,12 @@
 import { z } from "zod";
-import { DatabaseBackupStatus, HostStatus, ManagedDatabaseStatus, ManagedDatabaseType, RightLevel, VMStatus } from "../prisma/generated/client";
+import {
+	DatabaseBackupStatus,
+	HostStatus,
+	ManagedDatabaseStatus,
+	ManagedDatabaseType,
+	RightLevel,
+	VMStatus,
+} from "../prisma/generated/client";
 
 export const eventSchema = z.object({
 	id: z.string().uuid(),
@@ -15,13 +22,12 @@ export const hostRightSchema = z.object({
 	level: z.enum(RightLevel),
 });
 
-
 export const hostWithRightsSchema = z.object({
-    id: z.string().uuid(),
-    name: z.string(),
-    status: z.enum(HostStatus),
-    lastStatusChange: z.date(),
-    rights: z.array(hostRightSchema),
+	id: z.string().uuid(),
+	name: z.string(),
+	status: z.enum(HostStatus),
+	lastStatusChange: z.date(),
+	rights: z.array(hostRightSchema),
 });
 
 export const hostSchema = z.object({
@@ -75,10 +81,12 @@ export const managedDatabaseSchema = z.object({
 });
 
 export const managedDatabaseWithBackupsSchema = managedDatabaseSchema.extend({
-	backups: z.array(z.object({
-		id: z.string().uuid(),
-		status: z.enum(DatabaseBackupStatus),
-	})),
+	backups: z.array(
+		z.object({
+			id: z.string().uuid(),
+			status: z.enum(DatabaseBackupStatus),
+		}),
+	),
 });
 
 export const managedDatabaseCreateSchema = z.object({

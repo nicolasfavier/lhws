@@ -1,26 +1,28 @@
-import { useState } from "react";
 import { Button } from "@web/components/ui/button";
 import { Label } from "@web/components/ui/label";
 import { Switch } from "@web/components/ui/switch";
-import { useDashboard } from "@web/utils/use-dashboard";
 import { orpc, queryClient } from "@web/utils/orpc";
+import { useDashboard } from "@web/utils/use-dashboard";
 import { RotateCw } from "lucide-react";
+import { useState } from "react";
 
 export function Status() {
 	const { data } = useDashboard();
-	const isAvailable = data?.availability?.status ?? true;
+	const isAvailable = data?.availability?.status ?? false;
 
 	return (
 		<div className="flex items-center gap-2">
 			<Switch
 				id="availability"
 				checked={isAvailable}
-				disabled={!data}
 				onCheckedChange={(checked) =>
-					orpc.up.update.call({ status: checked })
+					orpc.admin.updateAvailability.call({ status: checked })
 				}
 			/>
-			<Label htmlFor="availability" className="cursor-pointer text-sm text-black">
+			<Label
+				htmlFor="availability"
+				className="cursor-pointer text-black text-sm"
+			>
 				Kill Switch
 			</Label>
 		</div>
@@ -36,12 +38,14 @@ export function MaintenanceMode() {
 			<Switch
 				id="maintenance"
 				checked={isMaintenance}
-				disabled={!data}
 				onCheckedChange={(checked) =>
 					orpc.maintenance.update.call({ status: checked })
 				}
 			/>
-			<Label htmlFor="maintenance" className="cursor-pointer text-sm text-black">
+			<Label
+				htmlFor="maintenance"
+				className="cursor-pointer text-black text-sm"
+			>
 				Maintenance mode
 			</Label>
 		</div>
@@ -67,7 +71,7 @@ export function ResetState() {
 			className="gap-2"
 		>
 			<RotateCw className={loading ? "animate-spin" : ""} />
-			<span className="text-sm text-black">Reset</span>
+			<span className="text-black text-sm">Reset</span>
 		</Button>
 	);
 }

@@ -1,15 +1,14 @@
-import { base } from "./base";
-import { upRouter, maintenanceRouter } from "./maintenance";
+import { adminRouter } from "./admin";
+import { baseNoKillSwitch } from "./base";
+import { databaseBackupsRouter } from "./database-backups";
+import { hostsRouter } from "./hosts";
+import { maintenanceRouter } from "./maintenance";
+import { managedDatabasesRouter } from "./managed-databases";
 import { messagesRouter } from "./messages";
 import { vmsRouter } from "./vms";
-import { hostsRouter } from "./hosts";
-import { managedDatabasesRouter } from "./managed-databases";
-import { databaseBackupsRouter } from "./database-backups";
 import { webRouter } from "./web";
-import { adminRouter } from "./admin";
 
-export const appRouter = base.router({
-	up: upRouter,
+export const appRouter = baseNoKillSwitch.router({
 	maintenance: maintenanceRouter,
 	messages: messagesRouter,
 	vms: vmsRouter,

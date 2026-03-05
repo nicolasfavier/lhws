@@ -27,16 +27,19 @@ export type AggregateApiStatus = {
 export type ApiStatusMinAggregateOutputType = {
   id: string | null
   available: boolean | null
+  maintenance: boolean | null
 }
 
 export type ApiStatusMaxAggregateOutputType = {
   id: string | null
   available: boolean | null
+  maintenance: boolean | null
 }
 
 export type ApiStatusCountAggregateOutputType = {
   id: number
   available: number
+  maintenance: number
   _all: number
 }
 
@@ -44,16 +47,19 @@ export type ApiStatusCountAggregateOutputType = {
 export type ApiStatusMinAggregateInputType = {
   id?: true
   available?: true
+  maintenance?: true
 }
 
 export type ApiStatusMaxAggregateInputType = {
   id?: true
   available?: true
+  maintenance?: true
 }
 
 export type ApiStatusCountAggregateInputType = {
   id?: true
   available?: true
+  maintenance?: true
   _all?: true
 }
 
@@ -132,6 +138,7 @@ export type ApiStatusGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 export type ApiStatusGroupByOutputType = {
   id: string
   available: boolean
+  maintenance: boolean
   _count: ApiStatusCountAggregateOutputType | null
   _min: ApiStatusMinAggregateOutputType | null
   _max: ApiStatusMaxAggregateOutputType | null
@@ -158,11 +165,13 @@ export type ApiStatusWhereInput = {
   NOT?: Prisma.ApiStatusWhereInput | Prisma.ApiStatusWhereInput[]
   id?: Prisma.StringFilter<"ApiStatus"> | string
   available?: Prisma.BoolFilter<"ApiStatus"> | boolean
+  maintenance?: Prisma.BoolFilter<"ApiStatus"> | boolean
 }
 
 export type ApiStatusOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   available?: Prisma.SortOrder
+  maintenance?: Prisma.SortOrder
 }
 
 export type ApiStatusWhereUniqueInput = Prisma.AtLeast<{
@@ -171,11 +180,13 @@ export type ApiStatusWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ApiStatusWhereInput[]
   NOT?: Prisma.ApiStatusWhereInput | Prisma.ApiStatusWhereInput[]
   available?: Prisma.BoolFilter<"ApiStatus"> | boolean
+  maintenance?: Prisma.BoolFilter<"ApiStatus"> | boolean
 }, "id">
 
 export type ApiStatusOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   available?: Prisma.SortOrder
+  maintenance?: Prisma.SortOrder
   _count?: Prisma.ApiStatusCountOrderByAggregateInput
   _max?: Prisma.ApiStatusMaxOrderByAggregateInput
   _min?: Prisma.ApiStatusMinOrderByAggregateInput
@@ -187,56 +198,67 @@ export type ApiStatusScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ApiStatusScalarWhereWithAggregatesInput | Prisma.ApiStatusScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"ApiStatus"> | string
   available?: Prisma.BoolWithAggregatesFilter<"ApiStatus"> | boolean
+  maintenance?: Prisma.BoolWithAggregatesFilter<"ApiStatus"> | boolean
 }
 
 export type ApiStatusCreateInput = {
   id: string
   available: boolean
+  maintenance?: boolean
 }
 
 export type ApiStatusUncheckedCreateInput = {
   id: string
   available: boolean
+  maintenance?: boolean
 }
 
 export type ApiStatusUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maintenance?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ApiStatusUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maintenance?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ApiStatusCreateManyInput = {
   id: string
   available: boolean
+  maintenance?: boolean
 }
 
 export type ApiStatusUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maintenance?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ApiStatusUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  maintenance?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ApiStatusCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   available?: Prisma.SortOrder
+  maintenance?: Prisma.SortOrder
 }
 
 export type ApiStatusMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   available?: Prisma.SortOrder
+  maintenance?: Prisma.SortOrder
 }
 
 export type ApiStatusMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   available?: Prisma.SortOrder
+  maintenance?: Prisma.SortOrder
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -248,24 +270,28 @@ export type BoolFieldUpdateOperationsInput = {
 export type ApiStatusSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   available?: boolean
+  maintenance?: boolean
 }, ExtArgs["result"]["apiStatus"]>
 
 export type ApiStatusSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   available?: boolean
+  maintenance?: boolean
 }, ExtArgs["result"]["apiStatus"]>
 
 export type ApiStatusSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   available?: boolean
+  maintenance?: boolean
 }, ExtArgs["result"]["apiStatus"]>
 
 export type ApiStatusSelectScalar = {
   id?: boolean
   available?: boolean
+  maintenance?: boolean
 }
 
-export type ApiStatusOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "available", ExtArgs["result"]["apiStatus"]>
+export type ApiStatusOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "available" | "maintenance", ExtArgs["result"]["apiStatus"]>
 
 export type $ApiStatusPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ApiStatus"
@@ -273,6 +299,7 @@ export type $ApiStatusPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     available: boolean
+    maintenance: boolean
   }, ExtArgs["result"]["apiStatus"]>
   composites: {}
 }
@@ -698,6 +725,7 @@ export interface Prisma__ApiStatusClient<T, Null = never, ExtArgs extends runtim
 export interface ApiStatusFieldRefs {
   readonly id: Prisma.FieldRef<"ApiStatus", 'String'>
   readonly available: Prisma.FieldRef<"ApiStatus", 'Boolean'>
+  readonly maintenance: Prisma.FieldRef<"ApiStatus", 'Boolean'>
 }
     
 

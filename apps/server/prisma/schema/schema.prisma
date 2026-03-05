@@ -71,8 +71,9 @@ model Message {
 }
 
 model ApiStatus {
-  id        String  @id
-  available Boolean
+  id          String  @id
+  available   Boolean
+  maintenance Boolean @default(false)
 }
 
 model ManagedDatabase {

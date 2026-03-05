@@ -1098,7 +1098,8 @@ export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeo
 
 export const ApiStatusScalarFieldEnum = {
   id: 'id',
-  available: 'available'
+  available: 'available',
+  maintenance: 'maintenance'
 } as const
 
 export type ApiStatusScalarFieldEnum = (typeof ApiStatusScalarFieldEnum)[keyof typeof ApiStatusScalarFieldEnum]

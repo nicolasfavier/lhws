@@ -18,7 +18,7 @@
 		"db:reset": "turbo -F server db:reset",
 		"db:generate": "turbo -F server db:generate",
 		"db:migrate": "turbo -F server db:migrate",
-        "db:seed": "turbo -F server db:seed"
+		"db:seed": "turbo -F server db:seed"
 	},
 	"dependencies": {
 		"@faker-js/faker": "^10.3.0"

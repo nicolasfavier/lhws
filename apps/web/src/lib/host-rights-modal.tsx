@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "@web/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
 } from "@web/components/ui/dialog";
+import { Input } from "@web/components/ui/input";
 import {
 	Select,
 	SelectContent,
@@ -12,12 +14,10 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@web/components/ui/select";
-import { Input } from "@web/components/ui/input";
-import { Button } from "@web/components/ui/button";
-import { orpc, queryClient } from "@web/utils/orpc";
 import type { Inputs } from "@web/utils/orpc";
+import { orpc, queryClient } from "@web/utils/orpc";
 import { Plus, Trash2 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 type Host = Inputs["web"]["dashboard"]["hosts"][number];
 
@@ -39,10 +39,15 @@ export function HostRightsModal({
 
 	const [loading, setLoading] = useState<string | null>(null);
 	const [newEmail, setNewEmail] = useState("");
-	const [newLevel, setNewLevel] = useState<(typeof RIGHT_LEVELS)[number]>("READ");
+	const [newLevel, setNewLevel] =
+		useState<(typeof RIGHT_LEVELS)[number]>("READ");
 	const [adding, setAdding] = useState(false);
 
-	async function handleChangeLevel(userId: string, email: string, level: string) {
+	async function handleChangeLevel(
+		userId: string,
+		email: string,
+		level: string,
+	) {
 		setLoading(userId);
 		await orpc.hosts.users.invite.call({
 			id: host.id,
@@ -85,14 +90,20 @@ export function HostRightsModal({
 				</DialogHeader>
 				<div className="space-y-3">
 					{users?.length === 0 && (
-						<p className="text-muted-foreground text-sm">No users assigned to this host.</p>
+						<p className="text-muted-foreground text-sm">
+							No users assigned to this host.
+						</p>
 					)}
 					{users?.map((user) => (
 						<div key={user.id} className="flex items-center gap-3">
-							<span className="min-w-0 flex-1 truncate text-sm">{user.email}</span>
+							<span className="min-w-0 flex-1 truncate text-sm">
+								{user.email}
+							</span>
 							<Select
 								value={user.level}
-								onValueChange={(value) => handleChangeLevel(user.id, user.email, value)}
+								onValueChange={(value) =>
+									handleChangeLevel(user.id, user.email, value)
+								}
 								disabled={loading === user.id}
 							>
 								<SelectTrigger className="w-28">
@@ -128,7 +139,9 @@ export function HostRightsModal({
 					/>
 					<Select
 						value={newLevel}
-						onValueChange={(value) => setNewLevel(value as (typeof RIGHT_LEVELS)[number])}
+						onValueChange={(value) =>
+							setNewLevel(value as (typeof RIGHT_LEVELS)[number])
+						}
 					>
 						<SelectTrigger className="w-28">
 							<SelectValue />

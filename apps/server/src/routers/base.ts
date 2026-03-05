@@ -1,6 +1,6 @@
 import { ORPCError, os } from "@orpc/server";
-import { type eventSchema } from "@server/schemas";
-import { z } from "zod";
+import type { eventSchema } from "@server/schemas";
+import type { z } from "zod";
 import prisma from "../../prisma";
 
 const worker = new Worker("@server/routers/worker.ts");
@@ -20,9 +20,7 @@ const loggingMiddleware = os.middleware(async ({ next, path }) => {
 	}
 });
 
-export const base = os.use(loggingMiddleware);
-
-export const statusMiddleware = os.middleware(async ({ next }) => {
+export const killSwitchMiddleware = os.middleware(async ({ next }) => {
 	if (Math.random() < 0.1)
 		throw new ORPCError("SERVICE_UNAVAILABLE", {
 			message: "Ooops, i might fail sometimes (like 1 on 10)",
@@ -33,3 +31,7 @@ export const statusMiddleware = os.middleware(async ({ next }) => {
 	if (!status.available) throw new ORPCError("SERVICE_UNAVAILABLE");
 	return next();
 });
+
+export const baseNoKillSwitch = os.use(loggingMiddleware);
+
+export const base = os.use(loggingMiddleware).use(killSwitchMiddleware);

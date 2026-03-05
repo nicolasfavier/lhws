@@ -1,7 +1,7 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
-	ServiceUnavailable,
 	isServiceError,
+	ServiceUnavailable,
 } from "@web/components/service-unavailable";
 import { H1 } from "@web/components/typography";
 import {
@@ -10,11 +10,11 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@web/components/ui/dropdown-menu";
-import { cn } from "@web/lib/utils";
 import { HostRightsModal } from "@web/lib/host-rights-modal";
-import { useDashboard } from "@web/utils/use-dashboard";
+import { cn } from "@web/lib/utils";
 import type { Inputs } from "@web/utils/orpc";
 import { orpc, queryClient } from "@web/utils/orpc";
+import { useDashboard } from "@web/utils/use-dashboard";
 import { Power, RotateCw, Shield } from "lucide-react";
 import { useState } from "react";
 
@@ -34,10 +34,7 @@ export function Hosts() {
 
 	const [ref] = useAutoAnimate();
 
-	const hostsByStatus = Object.groupBy(
-		hosts ?? [],
-		(host) => host.status,
-	);
+	const hostsByStatus = Object.groupBy(hosts ?? [], (host) => host.status);
 
 	async function handleRestart(id: string) {
 		await orpc.hosts.restart.call({ id });
@@ -52,7 +49,7 @@ export function Hosts() {
 	return (
 		<div className="space-y-6">
 			<H1>Hosts</H1>
-			{isServiceError(error) ? (
+			{isServiceError(error, data?.availability?.status) ? (
 				<ServiceUnavailable />
 			) : (
 				!isError && (
@@ -78,9 +75,7 @@ export function Hosts() {
 							{[...(hosts ?? [])].sort(sort).map((host) => (
 								<DropdownMenu key={host.id}>
 									<DropdownMenuTrigger asChild>
-										<div
-											className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1 hover:bg-accent"
-										>
+										<div className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1 hover:bg-accent">
 											<div
 												className={cn(
 													"size-3 shrink-0 rounded-full",
@@ -97,7 +92,7 @@ export function Hosts() {
 											)}
 											<span
 												className={cn(
-													"ml-auto shrink-0 rounded-full px-2 py-0.5 text-xs font-medium",
+													"ml-auto shrink-0 rounded-full px-2 py-0.5 font-medium text-xs",
 													getClassName(host.status),
 												)}
 											>
@@ -156,5 +151,8 @@ function getDotClassName(status: Host["status"]) {
 
 function sort(host1: Host, host2: Host) {
 	const sortOrder = ["ERROR", "STARTING", "RUNNING", "OFF"];
-	return sortOrder.indexOf(host1.status) - sortOrder.indexOf(host2.status) || host1.name.localeCompare(host2.name);
+	return (
+		sortOrder.indexOf(host1.status) - sortOrder.indexOf(host2.status) ||
+		host1.name.localeCompare(host2.name)
+	);
 }

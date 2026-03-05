@@ -1,7 +1,7 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
-	ServiceUnavailable,
 	isServiceError,
+	ServiceUnavailable,
 } from "@web/components/service-unavailable";
 import { H1 } from "@web/components/typography";
 import { Progress } from "@web/components/ui/progress";
@@ -24,7 +24,7 @@ export function Vms() {
 	return (
 		<div>
 			<H1>Virtual Machines</H1>
-			{isServiceError(error) ? (
+			{isServiceError(error, data?.availability?.status) ? (
 				<ServiceUnavailable />
 			) : (
 				!isError && (
@@ -43,27 +43,58 @@ export function Vms() {
 									{vms
 										?.sort((a, b) => a.name.localeCompare(b.name))
 										.map((vm) => (
-											<div key={vm.id} className="grid grid-cols-[auto_auto_1fr_auto_1fr] items-center gap-x-2 gap-y-1">
+											<div
+												key={vm.id}
+												className="grid grid-cols-[auto_auto_1fr_auto_1fr] items-center gap-x-2 gap-y-1"
+											>
 												<p className="row-span-2 text-sm">{vm.name}</p>
-												<span className="text-muted-foreground text-xs">AVG</span>
+												<span className="text-muted-foreground text-xs">
+													AVG
+												</span>
 												<div className="flex items-center gap-1">
-													<Progress value={vm.cpuAvgPercent} className="flex-1" />
-													<span className="w-8 text-right text-muted-foreground text-xs">{vm.cpuAvgPercent}%</span>
+													<Progress
+														value={vm.cpuAvgPercent}
+														className="flex-1"
+													/>
+													<span className="w-8 text-right text-muted-foreground text-xs">
+														{vm.cpuAvgPercent}%
+													</span>
 												</div>
-												<span className="text-muted-foreground text-xs">AVG</span>
+												<span className="text-muted-foreground text-xs">
+													AVG
+												</span>
 												<div className="flex items-center gap-1">
-													<Progress value={vm.ramAvgPercent} className="flex-1" />
-													<span className="w-8 text-right text-muted-foreground text-xs">{vm.ramAvgPercent}%</span>
+													<Progress
+														value={vm.ramAvgPercent}
+														className="flex-1"
+													/>
+													<span className="w-8 text-right text-muted-foreground text-xs">
+														{vm.ramAvgPercent}%
+													</span>
 												</div>
-												<span className="text-muted-foreground text-xs">PEAK</span>
+												<span className="text-muted-foreground text-xs">
+													PEAK
+												</span>
 												<div className="flex items-center gap-1">
-													<Progress value={vm.cpuPeakPercent} className="flex-1" />
-													<span className="w-8 text-right text-muted-foreground text-xs">{vm.cpuPeakPercent}%</span>
+													<Progress
+														value={vm.cpuPeakPercent}
+														className="flex-1"
+													/>
+													<span className="w-8 text-right text-muted-foreground text-xs">
+														{vm.cpuPeakPercent}%
+													</span>
 												</div>
-												<span className="text-muted-foreground text-xs">PEAK</span>
+												<span className="text-muted-foreground text-xs">
+													PEAK
+												</span>
 												<div className="flex items-center gap-1">
-													<Progress value={vm.ramPeakPercent} className="flex-1" />
-													<span className="w-8 text-right text-muted-foreground text-xs">{vm.ramPeakPercent}%</span>
+													<Progress
+														value={vm.ramPeakPercent}
+														className="flex-1"
+													/>
+													<span className="w-8 text-right text-muted-foreground text-xs">
+														{vm.ramPeakPercent}%
+													</span>
 												</div>
 											</div>
 										))}
