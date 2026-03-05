@@ -24,6 +24,7 @@ export async function seed(prisma: PrismaClientType) {
     await prisma.databaseBackup.deleteMany();
 	await prisma.managedDatabase.deleteMany();
 	await prisma.vM.deleteMany();
+    await prisma.message.deleteMany();
 	await prisma.right.deleteMany();
 	await prisma.host.deleteMany();
 	await prisma.user.deleteMany();
