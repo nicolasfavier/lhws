@@ -55,13 +55,15 @@ export const managedDatabasesRouter = base
 			.input(managedDatabaseCreateSchema)
 			.output(managedDatabaseSchema)
 			.handler(async ({ input }) => {
-				return prisma.managedDatabase.create({
+				const db = await prisma.managedDatabase.create({
 					data: {
 						...input,
 						status: ManagedDatabaseStatus.CREATING,
 						lastStatusChange: new Date(),
 					},
 				});
+                postEvent({ id: db.id, type: "database.creating" });
+                return db;
 			}),
 		delete: base
 			.route({

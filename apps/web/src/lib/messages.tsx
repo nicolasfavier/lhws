@@ -21,12 +21,12 @@ export function Messages() {
 	const [ref] = useAutoAnimate();
 
 	return (
-		<div>
+		<div className="flex flex-col overflow-hidden">
 			<H1>Messages</H1>
 			{isServiceError(error) ? (
 				<ServiceUnavailable />
 			) : (
-				<div className="space-y-4" ref={ref}>
+				<div className="overflow-y-auto space-y-4" ref={ref}>
 					{!isError &&
 						messages?.map((message) => (
 							<Card key={message.id}>
