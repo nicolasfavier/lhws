@@ -7,6 +7,7 @@ import { z } from "zod";
 import prisma from "../../prisma";
 import { DatabaseBackupStatus } from "../../prisma/generated/client";
 import { base, postEvent } from "./base";
+import { broadcastDatabaseBackupEvent } from "./ws";
 
 export const databaseBackupsRouter = base.prefix("/database-backups").router({
 	list: base
@@ -53,6 +54,7 @@ export const databaseBackupsRouter = base.prefix("/database-backups").router({
 				},
 			});
 			postEvent({ id: result.id, type: "database.backup" });
+			broadcastDatabaseBackupEvent("databaseBackup.created", result);
 			return result;
 		}),
 	delete: base
@@ -72,5 +74,6 @@ export const databaseBackupsRouter = base.prefix("/database-backups").router({
 			await prisma.databaseBackup.delete({
 				where: { id: input.id },
 			});
+			broadcastDatabaseBackupEvent("databaseBackup.deleted", existing);
 		}),
 });

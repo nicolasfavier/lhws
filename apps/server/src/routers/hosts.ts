@@ -4,6 +4,7 @@ import { subMinutes } from "date-fns";
 import { z } from "zod";
 import prisma from "../../prisma";
 import { base, postEvent } from "./base";
+import { broadcastHostEvent, broadcastRightEvent } from "./ws";
 
 export const hostsRouter = base.prefix("/hosts").router({
 	list: base
@@ -82,6 +83,7 @@ export const hostsRouter = base.prefix("/hosts").router({
 			});
 
 			postEvent({ id: input.id, type: "host.starting" });
+			broadcastHostEvent("host.updated", host);
 
 			return {
 				...host,
@@ -109,6 +111,8 @@ export const hostsRouter = base.prefix("/hosts").router({
 				where: { id: input.id },
 				data: { status: "OFF", lastStatusChange: new Date() },
 			});
+
+			broadcastHostEvent("host.updated", host);
 
 			return host;
 		}),
@@ -150,6 +154,14 @@ export const hostsRouter = base.prefix("/hosts").router({
 				});
 				console.log({ user });
 
+                const rightCount = await prisma.right.count({
+                    where: {
+                        userId: user.id,
+                        hostId: input.id,
+                    },
+                });
+                const rightExisted = rightCount > 0;
+
 				const right = await prisma.right.upsert({
 					create: {
 						hostId: input.id,
@@ -167,7 +179,21 @@ export const hostsRouter = base.prefix("/hosts").router({
 					},
 				});
 				console.log({ right });
-
+                if (rightExisted) {
+                    broadcastRightEvent("right.updated", {
+                        id: right.id,
+                        hostId: input.id,
+                        email: user.email,
+                        level: right.level,
+                    });
+                } else {
+                    broadcastRightEvent("right.created", {
+                        id: right.id,
+                        hostId: input.id,
+                        email: user.email,
+                        level: right.level,
+                    });
+                }
 				return {
 					id: right.id,
 					email: user.email,
@@ -185,6 +211,7 @@ export const hostsRouter = base.prefix("/hosts").router({
 			.handler(async ({ input }) => {
 				const right = await prisma.right.findFirst({
 					where: { id: input.userId, hostId: input.id },
+					include: { user: true },
 				});
 
 				if (!right) throw new ORPCError("NOT_FOUND");
@@ -194,6 +221,13 @@ export const hostsRouter = base.prefix("/hosts").router({
 					});
 
 				await prisma.right.delete({ where: { id: right.id } });
+
+				broadcastRightEvent("right.deleted", {
+					id: right.id,
+					hostId: input.id,
+					email: right.user.email,
+					level: right.level,
+				});
 			}),
 	}),
 });

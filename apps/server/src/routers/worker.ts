@@ -16,28 +16,30 @@ self.onmessage = (event: MessageEvent) => {
 			setTimeout(
 				async () => {
 					console.log("stuff");
-					await prisma.host.update({
+					const host = await prisma.host.update({
 						where: { id: parse.data.id },
 						data: {
 							status: Math.random() > 0.1 ? "RUNNING" : "ERROR",
 							lastStatusChange: new Date(),
 						},
 					});
+					self.postMessage({ type: "host.updated", host });
 				},
-				Math.random() * 60 * 1000,
+				10_000 + Math.random() * 15_000,
 			);
 			break;
 		case "database.creating":
 			setTimeout(
 				async () => {
 					console.log("creating db");
-					await prisma.managedDatabase.update({
+					const db = await prisma.managedDatabase.update({
 						where: { id: parse.data.id },
 						data: {
 							status: "RUNNING",
 							lastStatusChange: new Date(),
 						},
 					});
+                    self.postMessage({ type: "managedDatabase.updated", db });
 				},
 				10_000 + Math.random() * 5_000,
 			);
@@ -46,13 +48,14 @@ self.onmessage = (event: MessageEvent) => {
 			setTimeout(
 				async () => {
 					console.log("upgrading db");
-					await prisma.managedDatabase.update({
+					const db = await prisma.managedDatabase.update({
 						where: { id: parse.data.id },
 						data: {
 							status: "RUNNING",
 							lastStatusChange: new Date(),
 						},
 					});
+                    self.postMessage({ type: "managedDatabase.updated", db });
 				},
 				5000 + Math.random() * 20_000,
 			);
@@ -60,22 +63,24 @@ self.onmessage = (event: MessageEvent) => {
 		case "database.backup":
 			setTimeout(async () => {
 				console.log("backup db");
-				await prisma.databaseBackup.update({
+				const bkp = await prisma.databaseBackup.update({
 					where: { id: parse.data.id },
 					data: {
 						status: "RUNNING",
 					},
 				});
+                self.postMessage({ type: "databaseBackup.updated", bkp });
 			}, Math.random() * 5_000);
 			setTimeout(
 				async () => {
 					console.log("backup db done");
-					await prisma.databaseBackup.update({
+					const bkp = await prisma.databaseBackup.update({
 						where: { id: parse.data.id },
 						data: {
 							status: "DONE",
 						},
 					});
+                    self.postMessage({ type: "databaseBackup.updated", bkp });
 				},
 				10_000 + Math.random() * 15_000,
 			);

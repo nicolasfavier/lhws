@@ -4,6 +4,7 @@ import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { CORSPlugin } from "@orpc/server/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { appRouter } from "@server/routers";
+import { addClient, handleClientMessage, removeClient } from "@server/routers/ws";
 import prisma from "../prisma";
 
 const handler = new OpenAPIHandler(appRouter, {
@@ -43,12 +44,29 @@ setInterval(async () => {
 }, 30_000);
 
 Bun.serve({
-	async fetch(request: Request) {
+	websocket: {
+		open(ws) {
+			addClient(ws);
+		},
+		close(ws) {
+			removeClient(ws);
+		},
+		message(ws, message) {
+			handleClientMessage(ws, typeof message === "string" ? message : new TextDecoder().decode(message));
+		},
+	},
+	async fetch(request: Request, server) {
+		const url = new URL(request.url);
+
+		if (url.pathname === "/ws") {
+			const upgraded = server.upgrade(request);
+			if (upgraded) return undefined as unknown as Response;
+			return new Response("WebSocket upgrade failed", { status: 400 });
+		}
+
 		const { matched, response } = await handler.handle(request, {
 			prefix: "/api",
 		});
-
-		const url = new URL(request.url);
 
 		if (matched) {
 			return response;

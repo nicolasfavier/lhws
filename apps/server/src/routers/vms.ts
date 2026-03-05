@@ -4,6 +4,7 @@ import { z } from "zod";
 import prisma from "../../prisma";
 import { VMStatus } from "../../prisma/generated/enums";
 import { base } from "./base";
+import { broadcastVmEvent } from "./ws";
 
 export const vmsRouter = base.prefix("/vms").router({
 	list: base
@@ -61,6 +62,7 @@ export const vmsRouter = base.prefix("/vms").router({
 				data: { status: VMStatus.RUNNING, lastStatusChange: new Date() },
 			});
 
+			broadcastVmEvent("vm.started", vm);
 			return vm;
 		}),
 	resize: base
@@ -88,6 +90,7 @@ export const vmsRouter = base.prefix("/vms").router({
 				},
 			});
 
+			broadcastVmEvent("vm.resized", vm);
 			return vm;
 		}),
 
@@ -111,6 +114,7 @@ export const vmsRouter = base.prefix("/vms").router({
 				data: { status: VMStatus.OFF, lastStatusChange: new Date() },
 			});
 
+			broadcastVmEvent("vm.deleted", vm);
 			return vm;
 		}),
 });

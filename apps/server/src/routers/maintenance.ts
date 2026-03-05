@@ -1,6 +1,7 @@
 import { maintenanceStatus } from "@server/schemas";
 import prisma from "../../prisma";
 import { base } from "./base";
+import { broadcastMaintenanceEvent } from "./ws";
 
 export const maintenanceRouter = base.prefix("/maintenance").router({
     get: base
@@ -36,6 +37,7 @@ export const maintenanceRouter = base.prefix("/maintenance").router({
                 where: { id: currentStatus.id },
                 data: { maintenance: input.status },
             });
+            broadcastMaintenanceEvent("maintenance.updated", input);
             return input;
         }),
 });
@@ -74,6 +76,7 @@ export const maintenanceLegacyRouter = base.prefix("/maintenance/status").router
 				where: { id: currentStatus.id },
 				data: { maintenance: input.status },
 			});
+			broadcastMaintenanceEvent("maintenance.updated", input);
 			return input;
 		}),
 });

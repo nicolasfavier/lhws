@@ -2,6 +2,7 @@ import { messageSchema } from "@server/schemas";
 import { z } from "zod";
 import prisma from "../../prisma";
 import { base } from "./base";
+import { broadcastMessageEvent } from "./ws";
 
 export const messagesRouter = base.prefix("/messages").router({
 	list: base
@@ -28,6 +29,8 @@ export const messagesRouter = base.prefix("/messages").router({
 		.output(messageSchema)
 		.input(messageSchema.omit({ createdAt: true, id: true }))
 		.handler(async ({ input }) => {
-			return prisma.message.create({ data: input });
+			const message = await prisma.message.create({ data: input });
+			broadcastMessageEvent("message.created", message);
+			return message;
 		}),
 });

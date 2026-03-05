@@ -9,6 +9,7 @@ import { z } from "zod";
 import prisma from "../../prisma";
 import { ManagedDatabaseStatus } from "../../prisma/generated/client";
 import { base, postEvent } from "./base";
+import { broadcastManagedDatabaseEvent } from "./ws";
 
 export const managedDatabasesRouter = base.prefix("/managed-databases").router({
 	list: base
@@ -58,6 +59,7 @@ export const managedDatabasesRouter = base.prefix("/managed-databases").router({
 				},
 			});
 			postEvent({ id: db.id, type: "database.creating" });
+			broadcastManagedDatabaseEvent("managedDatabase.created", db);
 			return db;
 		}),
 	delete: base
@@ -74,13 +76,14 @@ export const managedDatabasesRouter = base.prefix("/managed-databases").router({
 			});
 			if (!existing) throw new ORPCError("NOT_FOUND");
 
-			await prisma.managedDatabase.update({
+			const db = await prisma.managedDatabase.update({
 				where: { id: input.id },
 				data: {
 					status: ManagedDatabaseStatus.OFF,
 					lastStatusChange: new Date(),
 				},
 			});
+			broadcastManagedDatabaseEvent("managedDatabase.deleted", db);
 		}),
 	upgrade: base
 		.route({
@@ -102,7 +105,7 @@ export const managedDatabasesRouter = base.prefix("/managed-databases").router({
 				});
 			}
 			postEvent({ id: input.id, type: "database.upgrading" });
-			return prisma.managedDatabase.update({
+			const db = await prisma.managedDatabase.update({
 				where: { id: input.id },
 				data: {
 					version: input.version,
@@ -110,6 +113,8 @@ export const managedDatabasesRouter = base.prefix("/managed-databases").router({
 					lastStatusChange: new Date(),
 				},
 			});
+			broadcastManagedDatabaseEvent("managedDatabase.updated", db);
+			return db;
 		}),
 	scale: base
 		.route({
@@ -125,13 +130,15 @@ export const managedDatabasesRouter = base.prefix("/managed-databases").router({
 			});
 			if (!existing) throw new ORPCError("NOT_FOUND");
 
-			return prisma.managedDatabase.update({
+			const db = await prisma.managedDatabase.update({
 				where: { id: input.id },
 				data: {
 					clusterSize: input.clusterSize,
 					lastStatusChange: new Date(),
 				},
 			});
+			broadcastManagedDatabaseEvent("managedDatabase.updated", db);
+			return db;
 		}),
 	start: base
 		.route({
@@ -147,13 +154,15 @@ export const managedDatabasesRouter = base.prefix("/managed-databases").router({
 			});
 			if (!existing) throw new ORPCError("NOT_FOUND");
 
-			return prisma.managedDatabase.update({
+			const db = await prisma.managedDatabase.update({
 				where: { id: input.id },
 				data: {
 					status: ManagedDatabaseStatus.RUNNING,
 					lastStatusChange: new Date(),
 				},
 			});
+			broadcastManagedDatabaseEvent("managedDatabase.updated", db);
+			return db;
 		}),
 	shutdown: base
 		.route({
@@ -169,12 +178,14 @@ export const managedDatabasesRouter = base.prefix("/managed-databases").router({
 			});
 			if (!existing) throw new ORPCError("NOT_FOUND");
 
-			return prisma.managedDatabase.update({
+			const db = await prisma.managedDatabase.update({
 				where: { id: input.id },
 				data: {
 					status: ManagedDatabaseStatus.OFF,
 					lastStatusChange: new Date(),
 				},
 			});
+			broadcastManagedDatabaseEvent("managedDatabase.updated", db);
+			return db;
 		}),
 });
