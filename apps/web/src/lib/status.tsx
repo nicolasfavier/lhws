@@ -15,9 +15,14 @@ export function Status() {
 			<Switch
 				id="availability"
 				checked={isAvailable}
-				onCheckedChange={(checked) =>
-					orpc.admin.updateAvailability.call({ status: checked })
-				}
+				onCheckedChange={(checked) => {
+					if (!checked) {
+						new Audio("/switch-off-alert.mp3").play();
+					} else {
+                        new Audio("/switch-on-alert.mp3").play();
+                    }
+					orpc.admin.updateAvailability.call({ status: checked });
+				}}
 			/>
 			<Label
 				htmlFor="availability"
@@ -57,6 +62,7 @@ export function ResetState() {
 
 	async function handleReset() {
 		setLoading(true);
+        new Audio("/dataset-reset.mp3").play();
 		await orpc.admin.reset.call({});
 		queryClient.invalidateQueries();
 		setLoading(false);
