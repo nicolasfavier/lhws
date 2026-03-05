@@ -204,7 +204,10 @@ export function ManagedDatabases() {
 											<div className="min-w-0 flex-1">
 												<div className="flex items-center gap-2">
 													<span className="font-medium text-sm">
-														{getTypeLabel(db.type)} v{db.version}
+														{getTypeLabel(db.type)} v{db.version}{" "}
+														<span className="text-muted-foreground font-mono">
+															{db.id.slice(0, 4)}…{db.id.slice(-4)}
+														</span>
 													</span>
 													<span className="text-muted-foreground text-xs">
 														{db.clusterSize}{" "}
