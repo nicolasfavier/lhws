@@ -1,5 +1,4 @@
-import { PrismaNeon } from "@prisma/adapter-neon";
-import { neon } from "@neondatabase/serverless";
+import { PrismaNeonHttp } from "@prisma/adapter-neon";
 import type {PrismaClient as PrismaClientType} from "@prisma/client";
 import {PrismaClient} from "@prisma/client";
 
@@ -181,8 +180,7 @@ export async function seed(prisma: PrismaClientType) {
 
 // Standalone runner: only executes when run directly (not when imported)
 if (import.meta.main) {
-    const sql = neon(process.env.DATABASE_URL!);
-    const adapter = new PrismaNeon(sql);
+    const adapter = new PrismaNeonHttp(process.env.DATABASE_URL!, {});
     const prisma = new PrismaClient({ adapter });
 
     seed(prisma)

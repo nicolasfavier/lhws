@@ -10,10 +10,18 @@ interface Env {
 	CORS_ORIGIN?: string;
 }
 
-function makeHandler(corsOrigin: string) {
-	return new OpenAPIHandler(appRouter, {
-		plugins: [new CORSPlugin({ origin: corsOrigin })],
-	});
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _handler: OpenAPIHandler<any> | undefined;
+let _handlerCorsOrigin: string | undefined;
+
+function getHandler(corsOrigin: string) {
+	if (!_handler || _handlerCorsOrigin !== corsOrigin) {
+		_handler = new OpenAPIHandler(appRouter, {
+			plugins: [new CORSPlugin({ origin: corsOrigin })],
+		});
+		_handlerCorsOrigin = corsOrigin;
+	}
+	return _handler;
 }
 
 const openAPIGenerator = new OpenAPIGenerator({
@@ -54,7 +62,7 @@ export default {
 	async fetch(request: Request, env: Env): Promise<Response> {
 		initPrisma(env.DATABASE_URL);
 		const corsOrigin = env.CORS_ORIGIN || "*";
-		const handler = makeHandler(corsOrigin);
+		const handler = getHandler(corsOrigin);
 		const url = new URL(request.url);
 
 		const { matched, response } = await handler.handle(request, {

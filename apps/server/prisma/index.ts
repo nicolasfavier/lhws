@@ -1,5 +1,4 @@
-import { PrismaNeon } from "@prisma/adapter-neon";
-import { neon } from "@neondatabase/serverless";
+import { PrismaNeonHttp } from "@prisma/adapter-neon";
 import { PrismaClient } from "@prisma/client/edge";
 
 // Lazy init: Cloudflare validates the Worker before secrets are available,
@@ -18,9 +17,8 @@ export function initPrisma(databaseUrl: string): void {
 function getClient(): PrismaClient {
 	if (!_client) {
 		const url = _databaseUrl ?? process.env.DATABASE_URL;
-		if (!url) throw new Error("No database connection string was provided to `neon()`. Set DATABASE_URL via `wrangler secret put DATABASE_URL`.");
-		const sql = neon(url);
-		const adapter = new PrismaNeon(sql);
+		if (!url) throw new Error("No database connection string was provided. Set DATABASE_URL via `wrangler secret put DATABASE_URL`.");
+		const adapter = new PrismaNeonHttp(url, {});
 		_client = new PrismaClient({ adapter });
 	}
 	return _client;
@@ -28,7 +26,7 @@ function getClient(): PrismaClient {
 
 const prisma = new Proxy({} as PrismaClient, {
 	get(_target, prop) {
-		return (getClient() as Record<string | symbol, unknown>)[prop];
+		return (getClient() as unknown as Record<string | symbol, unknown>)[prop];
 	},
 });
 
