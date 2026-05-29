@@ -7,7 +7,7 @@ import {
 } from "@server/schemas";
 import { z } from "zod";
 import prisma from "../../prisma";
-import { ManagedDatabaseStatus } from "../../prisma/generated/client";
+import { ManagedDatabaseStatus } from "@prisma/client";
 import { base, postEvent } from "./base";
 import { broadcastManagedDatabaseEvent } from "./ws";
 

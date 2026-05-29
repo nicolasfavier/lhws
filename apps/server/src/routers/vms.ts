@@ -2,7 +2,7 @@ import { ORPCError } from "@orpc/server";
 import { vmResizeSchema, vmSchema } from "@server/schemas";
 import { z } from "zod";
 import prisma from "../../prisma";
-import { VMStatus } from "../../prisma/generated/enums";
+import { VMStatus } from "@prisma/client";
 import { base } from "./base";
 import { broadcastVmEvent } from "./ws";
 

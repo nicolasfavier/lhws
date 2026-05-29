@@ -21,7 +21,8 @@
 		"@orpc/openapi": "^1.13.6",
 		"@orpc/server": "^1.13.6",
 		"@orpc/zod": "^1.13.6",
-		"@prisma/adapter-pg": "^7.4.2",
+		"@neondatabase/serverless": "^0.10.4",
+		"@prisma/adapter-neon": "^7.4.2",
 		"@prisma/client": "^7.4.2",
 		"date-fns": "^4.1.0",
 		"dotenv": "^17.3.1",
@@ -31,7 +32,9 @@
 	"devDependencies": {
 		"tsc-alias": "^1.8.16",
 		"typescript": "^5.9.3",
+		"@cloudflare/workers-types": "^4.20241224.0",
 		"@types/bun": "^1.3.10",
-		"prisma": "^7.4.2"
+		"prisma": "^7.4.2",
+		"wrangler": "^3.99.0"
 	}
 }

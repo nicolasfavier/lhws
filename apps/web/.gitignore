@@ -27,7 +27,7 @@
 
 # Environment & local files
 .env*
-!.env.example
+!.env.sample
 .DS_Store
 *.pem
 *.local

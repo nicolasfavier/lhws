@@ -6,7 +6,7 @@ import {
 	ManagedDatabaseType,
 	RightLevel,
 	VMStatus,
-} from "../prisma/generated/client";
+} from "@prisma/client";
 
 export const eventSchema = z.object({
 	id: z.string().uuid(),

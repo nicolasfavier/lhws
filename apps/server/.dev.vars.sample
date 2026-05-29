@@ -1,0 +1,4 @@
+# Copier ce fichier en .dev.vars pour le développement local avec `wrangler dev`
+# Mêmes valeurs que .env
+DATABASE_URL=postgresql://user:password@ep-xxx.neon.tech/lhws?sslmode=require
+CORS_ORIGIN=http://localhost:3001

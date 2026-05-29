@@ -7,7 +7,7 @@ import {
 } from "@server/schemas";
 import { z } from "zod";
 import prisma from "../../prisma";
-import { VMStatus } from "../../prisma/generated/client";
+import { VMStatus } from "@prisma/client";
 import { baseNoKillSwitch } from "./base";
 
 export const webRouter = baseNoKillSwitch.prefix("/web").router({

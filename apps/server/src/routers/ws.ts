@@ -1,18 +1,20 @@
-import type { ServerWebSocket } from "bun";
 import { EventTypes } from "@server/event-types";
 
-const clientSubscriptions = new Map<ServerWebSocket, Set<string>>();
+interface WsClient {
+	send(message: string): void;
+}
 
-export function addClient(ws: ServerWebSocket) {
-	// Default: listen to everything
+const clientSubscriptions = new Map<WsClient, Set<string>>();
+
+export function addClient(ws: WsClient) {
 	clientSubscriptions.set(ws, new Set(EventTypes.all()));
 }
 
-export function removeClient(ws: ServerWebSocket) {
+export function removeClient(ws: WsClient) {
 	clientSubscriptions.delete(ws);
 }
 
-export function handleClientMessage(ws: ServerWebSocket, message: string) {
+export function handleClientMessage(ws: WsClient, message: string) {
 	try {
 		const data = JSON.parse(message);
 		if (data.action === "subscribe" && Array.isArray(data.events)) {

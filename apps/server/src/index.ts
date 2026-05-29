@@ -1,68 +1,61 @@
-import "dotenv/config";
 import { OpenAPIGenerator } from "@orpc/openapi";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { CORSPlugin } from "@orpc/server/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { appRouter } from "@server/routers";
-import { addClient, handleClientMessage, removeClient } from "@server/routers/ws";
-import prisma from "../prisma";
+import prisma, { initPrisma } from "../prisma";
 
-const handler = new OpenAPIHandler(appRouter, {
-	plugins: [new CORSPlugin({ origin: process.env.CORS_ORIGIN || "*" })],
-});
+interface Env {
+	DATABASE_URL: string;
+	CORS_ORIGIN?: string;
+}
+
+function makeHandler(corsOrigin: string) {
+	return new OpenAPIHandler(appRouter, {
+		plugins: [new CORSPlugin({ origin: corsOrigin })],
+	});
+}
 
 const openAPIGenerator = new OpenAPIGenerator({
 	schemaConverters: [new ZodToJsonSchemaConverter()],
 });
 
-setInterval(async () => {
+async function updateVmMetrics() {
 	const vms = await prisma.vM.findMany({
 		where: { status: "RUNNING" },
 	});
-	vms.forEach(async (input) => {
-		const futureCpuAvg = Math.min(
-			100,
-			input.cpuAvgPercent + Math.random() * 10 - 5,
-		);
-		const futureRamAvg = Math.min(
-			100,
-			input.ramAvgPercent + Math.random() * 10 - 5,
-		);
-		const prismaVMClient = await prisma.vM.update({
-			where: { id: input.id },
-			data: {
-				vCPU: input.vCPU,
-				ramGB: input.ramGB,
-				cpuPeakPercent: Math.max(input.cpuPeakPercent, futureCpuAvg),
-				ramPeakPercent: Math.max(input.ramPeakPercent, futureRamAvg),
-				cpuAvgPercent: futureCpuAvg,
-				ramAvgPercent: futureRamAvg,
-				lastStatusChange: input.lastStatusChange,
-			},
-		});
-	});
-}, 30_000);
+	await Promise.all(
+		vms.map((input) => {
+			const futureCpuAvg = Math.min(
+				100,
+				input.cpuAvgPercent + Math.random() * 10 - 5,
+			);
+			const futureRamAvg = Math.min(
+				100,
+				input.ramAvgPercent + Math.random() * 10 - 5,
+			);
+			return prisma.vM.update({
+				where: { id: input.id },
+				data: {
+					vCPU: input.vCPU,
+					ramGB: input.ramGB,
+					cpuPeakPercent: Math.max(input.cpuPeakPercent, futureCpuAvg),
+					ramPeakPercent: Math.max(input.ramPeakPercent, futureRamAvg),
+					cpuAvgPercent: futureCpuAvg,
+					ramAvgPercent: futureRamAvg,
+					lastStatusChange: input.lastStatusChange,
+				},
+			});
+		}),
+	);
+}
 
-Bun.serve({
-	websocket: {
-		open(ws) {
-			addClient(ws);
-		},
-		close(ws) {
-			removeClient(ws);
-		},
-		message(ws, message) {
-			handleClientMessage(ws, typeof message === "string" ? message : new TextDecoder().decode(message));
-		},
-	},
-	async fetch(request: Request, server) {
+export default {
+	async fetch(request: Request, env: Env): Promise<Response> {
+		initPrisma(env.DATABASE_URL);
+		const corsOrigin = env.CORS_ORIGIN || "*";
+		const handler = makeHandler(corsOrigin);
 		const url = new URL(request.url);
-
-		if (url.pathname === "/ws") {
-			const upgraded = server.upgrade(request);
-			if (upgraded) return undefined as unknown as Response;
-			return new Response("WebSocket upgrade failed", { status: 400 });
-		}
 
 		const { matched, response } = await handler.handle(request, {
 			prefix: "/api",
@@ -76,7 +69,7 @@ Bun.serve({
 			if (request.method === "OPTIONS") {
 				return new Response(null, {
 					headers: {
-						"Access-Control-Allow-Origin": process.env.CORS_ORIGIN || "*",
+						"Access-Control-Allow-Origin": corsOrigin,
 						"Access-Control-Allow-Methods": "POST, GET, OPTIONS",
 						"Access-Control-Allow-Headers": "Content-Type, Authorization",
 					},
@@ -88,14 +81,12 @@ Bun.serve({
 					description: "QubeRT hackathon",
 					version: "1.0.0",
 				},
-				servers: [
-					{ url: "/api" } /** Should use absolute URLs in production */,
-				],
+				servers: [{ url: "/api" }],
 			});
 
 			return Response.json(spec, {
 				headers: {
-					"Access-Control-Allow-Origin": process.env.CORS_ORIGIN || "*",
+					"Access-Control-Allow-Origin": corsOrigin,
 				},
 			});
 		}
@@ -130,4 +121,9 @@ Bun.serve({
 
 		return new Response("Not found", { status: 404 });
 	},
-});
+
+	async scheduled(_event: unknown, env: Env): Promise<void> {
+		initPrisma(env.DATABASE_URL);
+		await updateVmMetrics();
+	},
+};

@@ -5,7 +5,7 @@ import {
 } from "@server/schemas";
 import { z } from "zod";
 import prisma from "../../prisma";
-import { DatabaseBackupStatus } from "../../prisma/generated/client";
+import { DatabaseBackupStatus } from "@prisma/client";
 import { base, postEvent } from "./base";
 import { broadcastDatabaseBackupEvent } from "./ws";
 

@@ -1,0 +1,18 @@
+name = "lhws-server"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+[alias]
+"@server" = "./src"
+
+[vars]
+# Mettre à jour avec l'URL Cloudflare Pages après déploiement du frontend
+# Ex: CORS_ORIGIN = "https://lhws.pages.dev"
+CORS_ORIGIN = "https://lhws.pages.dev"
+
+[triggers]
+crons = ["*/1 * * * *"]
+
+# Secrets à configurer via CLI (ne pas mettre ici) :
+#   wrangler secret put DATABASE_URL

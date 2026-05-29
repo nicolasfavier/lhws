@@ -1,6 +1,7 @@
-import {PrismaPg} from "@prisma/adapter-pg";
-import type {PrismaClient as PrismaClientType} from "./generated/client";
-import {PrismaClient} from "./generated/client";
+import { PrismaNeon } from "@prisma/adapter-neon";
+import { neon } from "@neondatabase/serverless";
+import type {PrismaClient as PrismaClientType} from "@prisma/client";
+import {PrismaClient} from "@prisma/client";
 
 function randomDateBetween(minDays: number, maxDays: number): Date {
     const ms = 24 * 60 * 60 * 1000;
@@ -180,10 +181,9 @@ export async function seed(prisma: PrismaClientType) {
 
 // Standalone runner: only executes when run directly (not when imported)
 if (import.meta.main) {
-    const adapter = new PrismaPg({
-        connectionString: process.env.DATABASE_URL,
-    });
-    const prisma = new PrismaClient({adapter});
+    const sql = neon(process.env.DATABASE_URL!);
+    const adapter = new PrismaNeon(sql);
+    const prisma = new PrismaClient({ adapter });
 
     seed(prisma)
         .catch(console.error)

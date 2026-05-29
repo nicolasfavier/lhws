@@ -28,8 +28,9 @@ node_modules/
 # env
 .env*
 .env.production
-!.env.example
+!.env.sample
 .dev.vars
+!.dev.vars.sample
 
 # logs
 logs/
