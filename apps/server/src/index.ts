@@ -31,65 +31,47 @@ const openAPIGenerator = new OpenAPIGenerator({
 async function processAsyncEvents() {
 	// Hosts: STARTING → RUNNING or ERROR
 	const startingHosts = await prisma.host.findMany({ where: { status: "STARTING" } });
-	await Promise.all(
-		startingHosts.map((host) =>
-			prisma.host.update({
-				where: { id: host.id },
-				data: {
-					status: Math.random() > 0.1 ? "RUNNING" : "ERROR",
-					lastStatusChange: new Date(),
-				},
-			}),
-		),
-	);
+	for (const host of startingHosts) {
+		const newStatus = Math.random() > 0.1 ? "RUNNING" : "ERROR";
+		await prisma.$executeRawUnsafe(
+			`UPDATE "Host" SET status = $1::"HostStatus", "lastStatusChange" = NOW() WHERE id = $2::uuid`,
+			newStatus,
+			host.id,
+		);
+	}
 
 	// Databases: CREATING / UPGRADING → RUNNING
-	await prisma.managedDatabase.updateMany({
-		where: { status: { in: ["CREATING", "UPGRADING"] } },
-		data: { status: "RUNNING", lastStatusChange: new Date() },
-	});
+	await prisma.$executeRaw`UPDATE "ManagedDatabase" SET status = 'RUNNING'::"ManagedDatabaseStatus", "lastStatusChange" = NOW() WHERE status IN ('CREATING'::"ManagedDatabaseStatus", 'UPGRADING'::"ManagedDatabaseStatus")`;
 
 	// Backups: RUNNING → DONE (before advancing SCHEDULED, to require 2 cron ticks)
-	await prisma.databaseBackup.updateMany({
-		where: { status: "RUNNING" },
-		data: { status: "DONE" },
-	});
+	await prisma.$executeRaw`UPDATE "DatabaseBackup" SET status = 'DONE'::"DatabaseBackupStatus" WHERE status = 'RUNNING'::"DatabaseBackupStatus"`;
 
 	// Backups: SCHEDULED → RUNNING
-	await prisma.databaseBackup.updateMany({
-		where: { status: "SCHEDULED" },
-		data: { status: "RUNNING" },
-	});
+	await prisma.$executeRaw`UPDATE "DatabaseBackup" SET status = 'RUNNING'::"DatabaseBackupStatus" WHERE status = 'SCHEDULED'::"DatabaseBackupStatus"`;
 }
 
 async function updateVmMetrics() {
 	const vms = await prisma.vM.findMany({
 		where: { status: "RUNNING" },
 	});
-	await Promise.all(
-		vms.map((input) => {
-			const futureCpuAvg = Math.min(
-				100,
-				input.cpuAvgPercent + Math.random() * 10 - 5,
-			);
-			const futureRamAvg = Math.min(
-				100,
-				input.ramAvgPercent + Math.random() * 10 - 5,
-			);
-			return prisma.vM.update({
-				where: { id: input.id },
-				data: {
-					vCPU: input.vCPU,
-					ramGB: input.ramGB,
-					cpuPeakPercent: Math.max(input.cpuPeakPercent, futureCpuAvg),
-					ramPeakPercent: Math.max(input.ramPeakPercent, futureRamAvg),
-					cpuAvgPercent: futureCpuAvg,
-					ramAvgPercent: futureRamAvg,
-					lastStatusChange: input.lastStatusChange,
-				},
-			});
-		}),
-	);
+	for (const input of vms) {
+		const futureCpuAvg = Math.min(
+			100,
+			input.cpuAvgPercent + Math.random() * 10 - 5,
+		);
+		const futureRamAvg = Math.min(
+			100,
+			input.ramAvgPercent + Math.random() * 10 - 5,
+		);
+		await prisma.$executeRawUnsafe(
+			`UPDATE "VM" SET "cpuPeakPercent" = $1, "ramPeakPercent" = $2, "cpuAvgPercent" = $3, "ramAvgPercent" = $4 WHERE id = $5::uuid`,
+			Math.round(Math.max(input.cpuPeakPercent, futureCpuAvg)),
+			Math.round(Math.max(input.ramPeakPercent, futureRamAvg)),
+			Math.round(futureCpuAvg),
+			Math.round(futureRamAvg),
+			input.id,
+		);
+	}
 }
 
 export default {
@@ -166,6 +148,7 @@ export default {
 
 	async scheduled(_event: unknown, env: Env): Promise<void> {
 		initPrisma(env.DATABASE_URL);
-		await Promise.all([updateVmMetrics(), processAsyncEvents()]);
+		await updateVmMetrics();
+		await processAsyncEvents();
 	},
 };
