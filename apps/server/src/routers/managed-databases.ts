@@ -76,12 +76,8 @@ export const managedDatabasesRouter = base.prefix("/managed-databases").router({
 			});
 			if (!existing) throw new ORPCError("NOT_FOUND");
 
-			const db = await prisma.managedDatabase.update({
+			const db = await prisma.managedDatabase.delete({
 				where: { id: input.id },
-				data: {
-					status: ManagedDatabaseStatus.OFF,
-					lastStatusChange: new Date(),
-				},
 			});
 			broadcastManagedDatabaseEvent("managedDatabase.deleted", db);
 		}),
