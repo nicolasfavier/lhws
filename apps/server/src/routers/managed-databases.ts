@@ -8,7 +8,7 @@ import {
 import { z } from "zod";
 import prisma from "../../prisma";
 import { ManagedDatabaseStatus } from "@prisma/client";
-import { base, postEvent } from "./base";
+import { base } from "./base";
 import { broadcastManagedDatabaseEvent } from "./ws";
 
 export const managedDatabasesRouter = base.prefix("/managed-databases").router({
@@ -58,7 +58,6 @@ export const managedDatabasesRouter = base.prefix("/managed-databases").router({
 					lastStatusChange: new Date(),
 				},
 			});
-			postEvent({ id: db.id, type: "database.creating" });
 			broadcastManagedDatabaseEvent("managedDatabase.created", db);
 			return db;
 		}),
@@ -100,7 +99,6 @@ export const managedDatabasesRouter = base.prefix("/managed-databases").router({
 					message: `Version must be higher than current version (${existing.version})`,
 				});
 			}
-			postEvent({ id: input.id, type: "database.upgrading" });
 			const db = await prisma.managedDatabase.update({
 				where: { id: input.id },
 				data: {

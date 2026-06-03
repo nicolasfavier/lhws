@@ -73,7 +73,7 @@ self.onmessage = (event: MessageEvent) => {
 			}, Math.random() * 5_000);
 			setTimeout(
 				async () => {
-					console.log("backup db done");
+					console.log("backup ddone");
 					const bkp = await prisma.databaseBackup.update({
 						where: { id: parse.data.id },
 						data: {

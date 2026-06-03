@@ -28,6 +28,40 @@ const openAPIGenerator = new OpenAPIGenerator({
 	schemaConverters: [new ZodToJsonSchemaConverter()],
 });
 
+async function processAsyncEvents() {
+	// Hosts: STARTING → RUNNING or ERROR
+	const startingHosts = await prisma.host.findMany({ where: { status: "STARTING" } });
+	await Promise.all(
+		startingHosts.map((host) =>
+			prisma.host.update({
+				where: { id: host.id },
+				data: {
+					status: Math.random() > 0.1 ? "RUNNING" : "ERROR",
+					lastStatusChange: new Date(),
+				},
+			}),
+		),
+	);
+
+	// Databases: CREATING / UPGRADING → RUNNING
+	await prisma.managedDatabase.updateMany({
+		where: { status: { in: ["CREATING", "UPGRADING"] } },
+		data: { status: "RUNNING", lastStatusChange: new Date() },
+	});
+
+	// Backups: RUNNING → DONE (before advancing SCHEDULED, to require 2 cron ticks)
+	await prisma.databaseBackup.updateMany({
+		where: { status: "RUNNING" },
+		data: { status: "DONE" },
+	});
+
+	// Backups: SCHEDULED → RUNNING
+	await prisma.databaseBackup.updateMany({
+		where: { status: "SCHEDULED" },
+		data: { status: "RUNNING" },
+	});
+}
+
 async function updateVmMetrics() {
 	const vms = await prisma.vM.findMany({
 		where: { status: "RUNNING" },
@@ -132,6 +166,6 @@ export default {
 
 	async scheduled(_event: unknown, env: Env): Promise<void> {
 		initPrisma(env.DATABASE_URL);
-		await updateVmMetrics();
+		await Promise.all([updateVmMetrics(), processAsyncEvents()]);
 	},
 };

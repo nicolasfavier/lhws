@@ -1,10 +1,5 @@
 import { ORPCError, os } from "@orpc/server";
-import type { eventSchema } from "@server/schemas";
-import type { z } from "zod";
 import prisma from "../../prisma";
-
-// Background workers are not supported on Cloudflare Workers without Durable Objects
-export function postEvent(_event: z.input<typeof eventSchema>) {}
 
 const loggingMiddleware = os.middleware(async ({ next, path }) => {
 	try {

@@ -3,7 +3,7 @@ import { hostSchema, userSchema } from "@server/schemas";
 import { subMinutes } from "date-fns";
 import { z } from "zod";
 import prisma from "../../prisma";
-import { base, postEvent } from "./base";
+import { base } from "./base";
 import { broadcastHostEvent, broadcastRightEvent } from "./ws";
 
 export const hostsRouter = base.prefix("/hosts").router({
@@ -88,7 +88,6 @@ export const hostsRouter = base.prefix("/hosts").router({
 			});
 			if (!host) throw new ORPCError("NOT_FOUND");
 
-			postEvent({ id: input.id, type: "host.starting" });
 			broadcastHostEvent("host.updated", host);
 
 			return {

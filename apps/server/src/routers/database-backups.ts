@@ -6,7 +6,7 @@ import {
 import { z } from "zod";
 import prisma from "../../prisma";
 import { DatabaseBackupStatus } from "@prisma/client";
-import { base, postEvent } from "./base";
+import { base } from "./base";
 import { broadcastDatabaseBackupEvent } from "./ws";
 
 export const databaseBackupsRouter = base.prefix("/database-backups").router({
@@ -53,7 +53,6 @@ export const databaseBackupsRouter = base.prefix("/database-backups").router({
 					status: DatabaseBackupStatus.SCHEDULED,
 				},
 			});
-			postEvent({ id: result.id, type: "database.backup" });
 			broadcastDatabaseBackupEvent("databaseBackup.created", result);
 			return result;
 		}),
