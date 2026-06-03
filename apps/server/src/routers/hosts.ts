@@ -76,11 +76,17 @@ export const hostsRouter = base.prefix("/hosts").router({
 			});
 			if (!existing) throw new ORPCError("NOT_FOUND");
 
-			const host = await prisma.host.update({
+			await prisma.host.update({
 				where: { id: input.id },
 				data: { status: "STARTING", lastStatusChange: new Date() },
+			});
+
+			// Neon HTTP mode doesn't support transactions; split update and include into separate queries
+			const host = await prisma.host.findFirst({
+				where: { id: input.id },
 				include: { rights: { include: { user: true } } },
 			});
+			if (!host) throw new ORPCError("NOT_FOUND");
 
 			postEvent({ id: input.id, type: "host.starting" });
 			broadcastHostEvent("host.updated", host);
