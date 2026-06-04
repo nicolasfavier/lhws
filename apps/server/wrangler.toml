@@ -12,7 +12,10 @@ compatibility_flags = ["nodejs_compat"]
 CORS_ORIGIN = "https://lhws.pages.dev"
 
 [triggers]
-crons = ["*/1 * * * *"]
+crons = [
+  "*/1 * * * *",  # VM metrics + Hosts
+  "*/2 * * * *",  # Databases + Backups
+]
 
 # Secrets à configurer via CLI (ne pas mettre ici) :
 #   wrangler secret put DATABASE_URL

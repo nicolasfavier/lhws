@@ -28,8 +28,7 @@ const openAPIGenerator = new OpenAPIGenerator({
 	schemaConverters: [new ZodToJsonSchemaConverter()],
 });
 
-async function processAsyncEvents() {
-	// Hosts: STARTING → RUNNING or ERROR
+async function processHosts() {
 	const startingHosts = await prisma.host.findMany({ where: { status: "STARTING" } });
 	for (const host of startingHosts) {
 		const newStatus = Math.random() > 0.1 ? "RUNNING" : "ERROR";
@@ -39,14 +38,15 @@ async function processAsyncEvents() {
 			host.id,
 		);
 	}
+}
 
-	// Databases: CREATING / UPGRADING → RUNNING
+async function processDatabases() {
 	await prisma.$executeRaw`UPDATE "ManagedDatabase" SET status = 'RUNNING'::"ManagedDatabaseStatus", "lastStatusChange" = NOW() WHERE status IN ('CREATING'::"ManagedDatabaseStatus", 'UPGRADING'::"ManagedDatabaseStatus")`;
+}
 
-	// Backups: RUNNING → DONE (before advancing SCHEDULED, to require 2 cron ticks)
+async function processBackups() {
+	// RUNNING → DONE before SCHEDULED → RUNNING to require 2 cron ticks
 	await prisma.$executeRaw`UPDATE "DatabaseBackup" SET status = 'DONE'::"DatabaseBackupStatus" WHERE status = 'RUNNING'::"DatabaseBackupStatus"`;
-
-	// Backups: SCHEDULED → RUNNING
 	await prisma.$executeRaw`UPDATE "DatabaseBackup" SET status = 'RUNNING'::"DatabaseBackupStatus" WHERE status = 'SCHEDULED'::"DatabaseBackupStatus"`;
 }
 
@@ -146,9 +146,17 @@ export default {
 		return new Response("Not found", { status: 404 });
 	},
 
-	async scheduled(_event: unknown, env: Env): Promise<void> {
+	async scheduled(event: { cron: string }, env: Env): Promise<void> {
 		initPrisma(env.DATABASE_URL);
-		await updateVmMetrics();
-		await processAsyncEvents();
+		switch (event.cron) {
+			case "*/1 * * * *":
+				await updateVmMetrics();
+				await processHosts();
+				break;
+			case "*/2 * * * *":
+				await processDatabases();
+				await processBackups();
+				break;
+		}
 	},
 };
